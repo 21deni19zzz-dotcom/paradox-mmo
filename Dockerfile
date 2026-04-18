@@ -35,8 +35,13 @@ COPY packages/server  ./packages/server
 COPY packages/client  ./packages/client
 COPY packages/tools   ./packages/tools
 
-# Install everything
-RUN yarn install --mode=skip-build || yarn install
+# Install all deps including native modules (sharp, uws).
+# --mode=skip-build would break Sharp native binding on linux-x64.
+# supportedArchitectures in .yarnrc overrides would be cleaner, but this CI hint works.
+ENV npm_config_arch=x64
+ENV npm_config_platform=linux
+ENV npm_config_libc=glibc
+RUN yarn install
 
 # ---- server build ----
 ARG MAX_PLAYERS=50
