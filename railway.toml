@@ -1,0 +1,15 @@
+# Railway deployment manifest for Paradox MMO (Kaetram-Open fork)
+# https://docs.railway.com/reference/config-as-code
+
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
+
+[deploy]
+startCommand = "node --enable-source-maps packages/server/dist/main.js"
+# uWS returns 200 OK for GET / when serving the client index.html → healthcheck passes
+healthcheckPath = "/"
+healthcheckTimeout = 100
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 5
+numReplicas = 1
