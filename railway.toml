@@ -6,7 +6,9 @@ builder = "DOCKERFILE"
 dockerfilePath = "Dockerfile"
 
 [deploy]
-startCommand = "node --enable-source-maps packages/server/dist/main.js"
+# /app/docker-entrypoint.sh materialises Railway env vars -> .env and then
+# execs the server. Kaetram's dotenv-extended doesn't read process.env directly.
+startCommand = "/app/docker-entrypoint.sh"
 # uWS returns 200 OK for GET / when serving the client index.html → healthcheck passes
 healthcheckPath = "/"
 healthcheckTimeout = 100
