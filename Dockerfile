@@ -86,11 +86,6 @@ COPY --from=builder /app/package.json                ./
 # Client static bundle — the patched httpResponse looks here
 COPY --from=builder /app/packages/client/dist ./client-dist
 
-# Entrypoint generates .env from Railway-injected process env
-# (Kaetram's dotenv-extended doesn't read process.env directly)
-COPY docker-entrypoint.sh /app/docker-entrypoint.sh
-RUN chmod +x /app/docker-entrypoint.sh
-
 ENV NODE_ENV=production
 ENV ACCEPT_LICENSE=true
 ENV SKIP_DATABASE=true
@@ -103,4 +98,9 @@ ENV OVERWRITE_AUTH=true
 # Railway injects $PORT at runtime; Kaetram's dotenv will pick it up.
 EXPOSE 9001
 
-CMD ["/app/docker-entrypoint.sh"]
+# Kaetram's config loader uses `dotenv.load({ path: '../../.env', defaults: '../../.env.defaults' })`
+# which is resolved relative to CWD. In monorepo dev CWD = packages/server, so ../../ = repo root.
+# We mirror that here: WORKDIR /app/packages/server → ../../.env.defaults = /app/.env.defaults.
+WORKDIR /app/packages/server
+
+CMD ["node", "--enable-source-maps", "dist/main.js"]

@@ -30,8 +30,10 @@ export default abstract class WebSocket {
         // Strip query string
         let cleanUrl = url.split('?')[0];
 
-        // Resolve from process.cwd() — dist is copied alongside server artefacts in the Dockerfile
-        let clientRoot = path.resolve(process.cwd(), 'client-dist');
+        // Resolve from a well-known absolute path — dist is copied to /app/client-dist
+        // in the Dockerfile. Using process.cwd() would break after we changed WORKDIR
+        // to /app/packages/server so Kaetram's ../../.env.defaults lookup succeeds.
+        let clientRoot = process.env.PARADOX_CLIENT_DIST || '/app/client-dist';
 
         if (!fs.existsSync(clientRoot)) {
             response.writeStatus('200 OK');

@@ -92,7 +92,14 @@ function camelCase(str: string): string {
 }
 
 let { NODE_ENV } = process.env,
-    env = dotenv.load({ path: `../../.env`, defaults: '../../.env.defaults' }),
+    env = dotenv.load({
+        path: `../../.env`,
+        defaults: '../../.env.defaults',
+        // Paradox: merge in process.env so Railway-injected variables take effect.
+        // Without this, the config is populated ONLY from on-disk dotfiles, and
+        // env vars like ACCEPT_LICENSE / DATABASE set by Railway are ignored.
+        includeProcessEnv: true
+    }),
     nodeEnvConfig = `../../.env.${NODE_ENV}`,
     nodeEnvConfigExists = await fs.stat(nodeEnvConfig).catch(() => false);
 
