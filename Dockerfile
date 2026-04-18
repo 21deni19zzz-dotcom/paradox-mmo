@@ -86,9 +86,15 @@ COPY --from=builder /app/package.json                ./
 # Client static bundle — the patched httpResponse looks here
 COPY --from=builder /app/packages/client/dist ./client-dist
 
+# Entrypoint generates .env from Railway-injected process env
+# (Kaetram's dotenv-extended doesn't read process.env directly)
+COPY docker-entrypoint.sh /app/docker-entrypoint.sh
+RUN chmod +x /app/docker-entrypoint.sh
+
 ENV NODE_ENV=production
 ENV ACCEPT_LICENSE=true
 ENV SKIP_DATABASE=true
+ENV DATABASE=mongodb
 ENV HOST=0.0.0.0
 ENV MAX_PLAYERS=50
 ENV TUTORIAL_ENABLED=false
@@ -97,4 +103,4 @@ ENV OVERWRITE_AUTH=true
 # Railway injects $PORT at runtime; Kaetram's dotenv will pick it up.
 EXPOSE 9001
 
-CMD ["node", "--enable-source-maps", "packages/server/dist/main.js"]
+CMD ["/app/docker-entrypoint.sh"]
