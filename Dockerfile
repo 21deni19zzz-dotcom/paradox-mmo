@@ -14,7 +14,7 @@
 #   SSL                  true
 #   NAME                 Paradox
 # ===========================================================================
-FROM node:22-slim AS builder
+FROM node:20-slim AS builder
 
 RUN apt-get update && apt-get install -y \
     git python3 build-essential ca-certificates \
@@ -67,7 +67,7 @@ ENV NAME=${NAME}
 RUN yarn workspace @kaetram/client build
 
 # ===========================================================================
-FROM node:22-slim AS runtime
+FROM node:20-slim AS runtime
 
 RUN apt-get update && apt-get install -y ca-certificates \
   && rm -rf /var/lib/apt/lists/*
