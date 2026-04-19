@@ -3,6 +3,7 @@
 @use 'impl/login';
 @use 'impl/intro';
 @use 'impl/worlds';
+@use 'impl/mobile'; // MUST BE LAST — emergency mobile hotfix с !important
 
 #alert {
     width: 100%;
