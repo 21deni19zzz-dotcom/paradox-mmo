@@ -223,65 +223,101 @@ export default class InputController {
 
         let target: Entity;
 
-        switch (event.key) {
-            case 'w':
-            case 'W':
-            case 'ц':
+        // Paradox Online hotkeys — use event.code to survive RU/EN keyboard layouts.
+        // WASD / arrows = movement, letters = menu toggles, digits = ability quickslots.
+        switch (event.code) {
+            // ── Movement (WASD + Arrows) ──
+            case 'KeyW':
             case 'ArrowUp': {
                 this.player.moveUp = true;
                 return;
             }
 
-            case 'a':
-            case 'A':
-            case 'ф':
+            case 'KeyA':
             case 'ArrowLeft': {
                 this.player.moveLeft = true;
                 return;
             }
 
-            case 's':
-            case 'S':
-            case 'ы':
+            case 'KeyS':
             case 'ArrowDown': {
                 this.player.moveDown = true;
                 return;
             }
 
-            case 'd':
-            case 'D':
-            case 'в':
+            case 'KeyD':
             case 'ArrowRight': {
                 this.player.moveRight = true;
                 return;
             }
 
+            // ── Chat / Esc / Enter ──
             case 'Enter': {
                 this.chatHandler.toggle();
                 return;
             }
 
-            case 'i': {
+            case 'Escape': {
+                this.game.menu.hide();
+
+                if (this.player.moving) this.player.stop();
+                return;
+            }
+
+            // ── Menu toggles (I/C/K/M/F/G/L/P/H/T) ──
+            case 'KeyI': {
                 this.game.menu.getInventory().toggle();
                 return;
             }
 
-            case 'm': {
-                this.game.menu.getWarp().toggle();
-                return;
-            }
-
-            case 'p': {
+            case 'KeyC': {
+                // Profile (C = Character)
                 this.game.menu.getProfile().toggle();
                 return;
             }
 
-            case 'h': {
+            case 'KeyK': {
+                // Quests
+                this.game.menu.getQuests().toggle();
+                return;
+            }
+
+            case 'KeyM': {
+                // Map / Warp
+                this.game.menu.getWarp().toggle();
+                return;
+            }
+
+            case 'KeyF': {
+                // Friends
+                this.game.menu.getFriends().toggle();
+                return;
+            }
+
+            case 'KeyG': {
+                // Guilds
+                this.game.menu.getGuilds().toggle();
+                return;
+            }
+
+            case 'KeyL': {
+                // Leaderboards
+                this.game.menu.getLeaderboards().toggle();
+                return;
+            }
+
+            case 'KeyP': {
+                // Profile (alias)
+                this.game.menu.getProfile().toggle();
+                return;
+            }
+
+            case 'KeyH': {
                 this.game.menu.getInventory().selectEdible();
                 break;
             }
 
-            case 't': {
+            case 'KeyT': {
                 target = this.game.entities.get(this.player.lastTarget);
 
                 if (!target) return;
@@ -294,30 +330,65 @@ export default class InputController {
                 return;
             }
 
-            case 'Escape': {
-                this.game.menu.hide();
-
-                if (this.player.moving) this.player.stop();
-                return;
-            }
-
-            case '+':
-            case '=': {
+            // ── Zoom ──
+            case 'Equal':
+            case 'NumpadAdd': {
                 return this.game.zoom(0.2);
             }
 
-            case '-':
-            case '_': {
+            case 'Minus':
+            case 'NumpadSubtract': {
                 return this.game.zoom(-0.2);
             }
 
-            case '0':
-            case ')': {
+            case 'Digit0':
+            case 'Numpad0': {
                 this.camera.setZoom();
 
                 return this.game.zoom(0);
             }
+
+            // ── Quickslots 1-4 (activate ability) ──
+            case 'Digit1':
+            case 'Numpad1': {
+                this.triggerQuickslot(0);
+                return;
+            }
+
+            case 'Digit2':
+            case 'Numpad2': {
+                this.triggerQuickslot(1);
+                return;
+            }
+
+            case 'Digit3':
+            case 'Numpad3': {
+                this.triggerQuickslot(2);
+                return;
+            }
+
+            case 'Digit4':
+            case 'Numpad4': {
+                this.triggerQuickslot(3);
+                return;
+            }
         }
+    }
+
+    /**
+     * Simulates a click on the N-th ability quickslot, mimicking the existing
+     * mouse-click handler in QuickSlots. Allows keyboard activation 1-4.
+     * @param index 0-based index of the quickslot to trigger.
+     */
+
+    private triggerQuickslot(index: number): void {
+        let bar = document.querySelector<HTMLElement>('#ability-shortcut');
+        if (!bar || bar.hidden) return;
+
+        let slot = bar.children[index] as HTMLElement | undefined;
+        if (!slot) return;
+
+        slot.click();
     }
 
     /**
@@ -327,26 +398,26 @@ export default class InputController {
      */
 
     public handleKeyUp(event: KeyboardEvent): void {
-        switch (event.key) {
-            case 'w':
+        switch (event.code) {
+            case 'KeyW':
             case 'ArrowUp': {
                 this.player.moveUp = false;
                 break;
             }
 
-            case 'a':
+            case 'KeyA':
             case 'ArrowLeft': {
                 this.player.moveLeft = false;
                 break;
             }
 
-            case 's':
+            case 'KeyS':
             case 'ArrowDown': {
                 this.player.moveDown = false;
                 break;
             }
 
-            case 'd':
+            case 'KeyD':
             case 'ArrowRight': {
                 this.player.moveRight = false;
                 break;

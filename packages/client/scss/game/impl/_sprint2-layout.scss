@@ -1,0 +1,228 @@
+// ═══════════════════════════════════════════════════════════════════════════
+// SPRINT 2 — HUD LAYOUT
+//
+// Решаем:
+// 1. Inventory переезжает в правый ВЕРХНИЙ угол (было bottom-right)
+// 2. Quickslots 1-4 всегда видны, позиционированы внизу по центру над action-bar
+// 3. Z-index система: строгая иерархия, меню не перекрывают друг друга
+// 4. На quickslot виден номер 1-4 (из data-key в HTML)
+//
+// Применяется ТОЛЬКО на десктопе (>= 901px).
+// На мобильном остаются правила _mobile.scss.
+// ═══════════════════════════════════════════════════════════════════════════
+
+// ── Z-INDEX ИЕРАРХИЯ ──────────────────────────────────────────────────────
+// 0   — canvas / игровой мир
+// 10  — HUD статичный (player-info, buttons, zoom, ability-shortcut)
+// 50  — HUD-меню quick-access (inventory в углу, chat)
+// 100 — открытые модалки (bank, trade, store, profile, quests, etc)
+// 150 — overlay (map, welcome, settings)
+// 200 — popup диалоги (confirm, notifications, interact)
+// 1000— критические (death screen, error)
+
+// ── DESKTOP (>=901px) ──────────────────────────────────────────────────────
+@media only screen and (min-width: 901px) {
+
+    // ═══ INVENTORY — правый верхний угол (постоянно виден quick-slots) ═══
+    #inventory {
+        top: 5em !important;       // ниже player-info (HP/MP справа сверху если был бы)
+        right: 1em !important;
+        bottom: auto !important;
+        left: auto !important;
+
+        z-index: 50 !important;
+
+        // Grid 5x5 = 25 слотов (дефолт Kaetram)
+        // Размер слота 3.5em * 5 + gaps = ~18em, доп padding 0.75em * 2 = 19.5em
+        width: 20em !important;
+        height: 22em !important;
+    }
+
+    #inventory-container ul {
+        display: grid !important;
+        grid-template-columns: repeat(5, 1fr) !important;
+        gap: 0.3em !important;
+
+        width: 100% !important;
+        height: 100% !important;
+        padding: 0 !important;
+
+        list-style: none !important;
+    }
+
+    #inventory-container ul li {
+        width: auto !important;
+        height: auto !important;
+        aspect-ratio: 1 / 1 !important;
+
+        transition: transform 0.1s ease, filter 0.1s ease;
+
+        &:hover {
+            transform: scale(1.08);
+            filter: brightness(1.25);
+        }
+    }
+
+    // ═══ QUICKSLOTS (#ability-shortcut) — внизу по центру над action-bar ═══
+    #ability-shortcut {
+        position: absolute !important;
+        bottom: calc(1.25em + 3.5em * var(--pdx-hud-scale, 1.6) + 1em) !important;
+        right: auto !important;
+        left: 50% !important;
+
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 0.4em !important;
+
+        padding: 0.5em 0.7em !important;
+
+        background: rgba(15, 12, 30, 0.9) !important;
+        border: 2px solid #00e5ff !important;
+        border-radius: 0.75em !important;
+        box-shadow:
+            0 6px 20px rgba(0, 0, 0, 0.7),
+            0 0 20px rgba(0, 229, 255, 0.25),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+
+        transform: translateX(-50%) !important;
+        opacity: 1 !important;
+
+        z-index: 10 !important;
+    }
+
+    .ability-quickslot {
+        position: relative !important;
+
+        width: calc(2.5em * var(--pdx-hud-scale, 1.6)) !important;
+        height: calc(2.5em * var(--pdx-hud-scale, 1.6)) !important;
+
+        background-color: rgba(255, 255, 255, 0.04) !important;
+        border: 1px solid rgba(255, 255, 255, 0.12) !important;
+        border-radius: 0.3em !important;
+
+        cursor: pointer !important;
+        transition: all 0.15s ease !important;
+
+        &:hover {
+            background-color: rgba(0, 229, 255, 0.15) !important;
+            border-color: rgba(0, 229, 255, 0.6) !important;
+            transform: translateY(-2px) !important;
+        }
+
+        &.active {
+            background-color: rgba(252, 218, 92, 0.2) !important;
+            border-color: #fcda5c !important;
+            box-shadow: 0 0 12px rgba(252, 218, 92, 0.5) !important;
+        }
+    }
+
+    // Номер клавиши 1-4 в левом-верхнем углу слота
+    .quickslot-label {
+        position: absolute !important;
+        top: 0.15em !important;
+        left: 0.3em !important;
+
+        font-family: Monogram, 'AdvoCut Fallback', sans-serif !important;
+        font-size: 0.9em !important;
+        color: #c6c0a3 !important;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9) !important;
+
+        pointer-events: none !important;
+    }
+
+    // ═══ Z-INDEX для всех открытых меню — строгая иерархия ═══
+
+    // Игровой canvas — нижний слой
+    #canvas {
+        z-index: 0 !important;
+    }
+
+    // Статичный HUD
+    #player-info,
+    #buttons,
+    #zoom-buttons {
+        z-index: 10 !important;
+    }
+
+    // Инвентарь и чат — доступ всегда, но ниже модалок
+    #chat {
+        z-index: 50 !important;
+    }
+
+    // Открытые меню и модалки
+    #bank,
+    #trade,
+    #store,
+    #enchant,
+    #crafting,
+    #lootbag,
+    #guilds,
+    #leaderboards,
+    #quest,
+    #in-app-store {
+        z-index: 100 !important;
+    }
+
+    // Full-screen overlays
+    #welcome,
+    #map-frame,
+    #settings-page,
+    #profile-container,
+    #friends-container,
+    #quests,
+    #achievements,
+    #equipments,
+    #book {
+        z-index: 150 !important;
+    }
+
+    // Pop-up диалоги и notifications
+    #interact,
+    #notifications,
+    #notification,
+    #message,
+    #action-container,
+    #attack-info {
+        z-index: 200 !important;
+    }
+
+    // Death screen — всегда сверху
+    .death #death,
+    body.death {
+        z-index: 1000 !important;
+    }
+
+    // ═══ Action-bar опускаем на слой 10 ═══
+    // (#buttons уже в правиле выше, позиция остаётся из _desktop-redesign)
+
+    // ═══ INVENTORY-BUTTON в action-bar — скрываем (inventory теперь всегда виден) ═══
+    // Можно оставить как "переключатель видимости" если inventory закрыт.
+    // На этом этапе — оставляем, пусть игрок может скрыть/показать по клику.
+}
+
+// ── Мобильный: inventory скрываем из постоянного HUD, открывается только кликом ──
+@media only screen and (max-width: 900px) {
+    // Inventory на мобильном — по кнопке как было, скрыт по умолчанию
+    // (исходное поведение Kaetram с display: none до клика)
+
+    // Quickslots на мобильном компактнее
+    #ability-shortcut {
+        bottom: 5.5em !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+
+        padding: 0.3em 0.4em !important;
+        gap: 0.25em !important;
+
+        opacity: 1 !important;
+    }
+
+    .ability-quickslot {
+        width: 2.5em !important;
+        height: 2.5em !important;
+    }
+
+    .quickslot-label {
+        font-size: 0.75em !important;
+    }
+}
