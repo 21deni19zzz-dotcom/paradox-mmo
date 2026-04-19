@@ -1,11 +1,12 @@
 {
-    "0.5.5-beta": {
-        "title": "Kaetram 0.5.5-beta",
+    "Paradox v0.1": {
+        "title": "Paradox Online — v0.1",
         "content": [
-            "- Add language selection menu",
-            "- Add FPS throttle option",
-            "- New quests",
-            "- Anti-cheating detection improvements"
+            "- Первый релиз под брендом Paradox Online",
+            "- Полный ребрендинг интерфейса",
+            "- Базовая русская локализация",
+            "- Поддержка кириллицы в никнеймах",
+            "- Увеличенный UI для мобильных устройств"
         ]
     }
 }

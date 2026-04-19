@@ -1,5 +1,5 @@
 export default {
-    NAME: 'Kaetram',
+    NAME: 'Paradox Online',
     DESCRIPTION:
-        'Kaetram ay isang open-source na game-engine, nilikha ito para tulungan and mga interesadong pumasok sa larangan na pag develop ng laro. Ang original na ideya ay batay sa larong BrowserQuest. Ang mga assets ay pareho ngunit and code ay binura at muling ginawa sa simula'
+        'Ang Paradox Online ay isang 2D MMORPG sa browser mula sa Paradox Company. Galugarin ang mundo, lumaban sa mga halimaw, palakasin ang iyong karakter, at makilala ang ibang manlalaro sa real time.'
 } as const;

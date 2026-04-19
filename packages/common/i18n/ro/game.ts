@@ -1,5 +1,5 @@
 export default {
-    NAME: 'Kaetram',
+    NAME: 'Paradox Online',
     DESCRIPTION:
-        "Kaetram is an open-source game-engine created to aid those interested in entering the game development realm. The original idea is based on Little Workshop's demo game - BrowserQuest. The assets have remained the same, but the code itself has been completely wiped and redone from the ground up."
+        'Paradox Online este un MMORPG 2D în browser de la Paradox Company. Explorează lumea, luptă cu monștrii, îți dezvolți personajul și întâlnește alți jucători în timp real.'
 } as const;
