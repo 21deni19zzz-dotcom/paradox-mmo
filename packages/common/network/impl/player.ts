@@ -25,6 +25,11 @@ export interface PlayerData extends EntityData {
     maxMana?: number;
 
     equipments: EquipmentData[];
+
+    // Paradox Online Sprint 3 Заход 2 — Fog-of-War persist.
+    // Список ID регионов (MAP_DIVISION_SIZE = 48), которые игрок уже видел.
+    // Переиспользует серверное поле `Player.regionsLoaded`, которое уже сохраняется в MongoDB.
+    discoveredRegions?: number[];
 }
 
 export default class PlayerPacket extends Packet {

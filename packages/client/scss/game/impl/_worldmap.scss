@@ -1,0 +1,172 @@
+// ────────────────────────────────────────────────────────────────────────────
+// Paradox Online · Sprint 3 · World Map overlay
+//
+// Жёсткие правила (урок Sprint 2 — подтверждено кровью):
+//   · overlay — прямой потомок <body>, position:fixed inset:0, z-index:150.
+//     НИКОГДА не вкладывать в #game-container/#border/#canvas — canvas движка
+//     считает viewport из их DOM-размеров, любые padding/border/box-shadow
+//     ломают координаты камеры и hit-тест мышью.
+//   · никаких :root { --var } — наследуется непредсказуемо.
+//   · никаких !important — перебивает Kaetram-стили.
+//   · z-index иерархия: HUD=10, inventory/warp=50, worldMap=150, modals=200.
+// ────────────────────────────────────────────────────────────────────────────
+
+#world-map {
+    position: fixed;
+    inset: 0;
+    display: none;
+    flex-direction: column;
+    z-index: 150;
+
+    background: rgba(8, 9, 14, 0.92);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+
+    color: rgb(220, 230, 245);
+    font-family: 'AdvoCut', system-ui, sans-serif;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+#world-map-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75em 1.25em;
+    border-bottom: 1px solid rgba(150, 180, 255, 0.2);
+    font-size: 1.1em;
+    flex-shrink: 0;
+
+    #world-map-title {
+        font-weight: 700;
+        letter-spacing: 0.05em;
+    }
+
+    #world-map-stats {
+        color: rgba(180, 200, 240, 0.8);
+        font-size: 0.9em;
+    }
+
+    #close-world-map {
+        cursor: pointer;
+        background: transparent;
+        border: 1px solid rgba(150, 180, 255, 0.3);
+        color: rgb(220, 230, 245);
+        padding: 0.3em 0.8em;
+        border-radius: 4px;
+        font-family: inherit;
+        font-size: 0.9em;
+        transition: background 0.15s, border-color 0.15s;
+
+        &:hover {
+            background: rgba(150, 180, 255, 0.15);
+            border-color: rgba(150, 180, 255, 0.6);
+        }
+    }
+}
+
+#world-map-canvas-container {
+    position: relative;
+    flex: 1;
+    overflow: hidden;
+}
+
+#world-map-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    touch-action: none; // блокируем браузерный pan/zoom на canvas
+    cursor: grab;
+
+    &:active {
+        cursor: grabbing;
+    }
+}
+
+#world-map-legend {
+    position: absolute;
+    left: 1em;
+    bottom: 1em;
+    display: flex;
+    gap: 1em;
+    padding: 0.6em 0.9em;
+    background: rgba(15, 18, 28, 0.85);
+    border: 1px solid rgba(150, 180, 255, 0.2);
+    border-radius: 6px;
+    font-size: 0.85em;
+    pointer-events: none;
+
+    span {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4em;
+
+        &::before {
+            content: '';
+            width: 12px;
+            height: 12px;
+            display: inline-block;
+            border-radius: 2px;
+        }
+
+        &.legend-explored::before {
+            background: rgb(74, 123, 74);
+        }
+
+        &.legend-wall::before {
+            background: rgb(110, 100, 90);
+        }
+
+        &.legend-seen::before {
+            background: rgb(28, 30, 40);
+            border: 1px solid rgba(150, 180, 255, 0.4);
+        }
+
+        &.legend-fog::before {
+            background: rgb(15, 15, 20);
+        }
+
+        &.legend-player::before {
+            background: #ff5252;
+            border-radius: 50%;
+        }
+    }
+}
+
+#world-map-hint {
+    position: absolute;
+    right: 1em;
+    bottom: 1em;
+    padding: 0.5em 0.8em;
+    background: rgba(15, 18, 28, 0.85);
+    border: 1px solid rgba(150, 180, 255, 0.2);
+    border-radius: 6px;
+    font-size: 0.8em;
+    color: rgba(180, 200, 240, 0.7);
+    pointer-events: none;
+    max-width: 260px;
+    line-height: 1.4;
+}
+
+// Mobile: уменьшаем header, прячем легенду подробную
+@media (max-width: 600px) {
+    #world-map-header {
+        padding: 0.5em 0.8em;
+        font-size: 0.95em;
+    }
+
+    #world-map-legend {
+        left: 0.5em;
+        bottom: 0.5em;
+        padding: 0.4em 0.6em;
+        font-size: 0.75em;
+        gap: 0.6em;
+        flex-wrap: wrap;
+        max-width: calc(100vw - 1em);
+    }
+
+    #world-map-hint {
+        display: none;
+    }
+}

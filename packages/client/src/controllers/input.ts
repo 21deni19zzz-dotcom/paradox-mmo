@@ -288,6 +288,12 @@ export default class InputController {
                 return;
             }
 
+            case 'KeyN': {
+                // World Map overlay (Navigation) — Sprint 3
+                this.game.menu.getWorldMap().toggle();
+                return;
+            }
+
             case 'KeyF': {
                 // Friends
                 this.game.menu.getFriends().toggle();

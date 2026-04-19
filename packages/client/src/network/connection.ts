@@ -249,6 +249,11 @@ export default class Connection {
     private handleWelcome(data: PlayerData): void {
         this.game.player.load(data);
 
+        // Paradox Online Sprint 3 Заход 2 — восстанавливаем fog-of-war из серверного
+        // списка регионов (persist в MongoDB). Menu может не быть инициализировано
+        // в самых ранних фазах — отсюда optional chaining.
+        this.game.menu?.getWorldMap?.().setDiscoveredRegions(data.discoveredRegions);
+
         this.game.start();
         this.game.postLoad();
     }

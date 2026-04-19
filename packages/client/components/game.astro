@@ -949,3 +949,30 @@
         </div>
     </div>
 </div>
+
+<!--
+    Paradox Online · Sprint 3 · World Map overlay.
+    ВАЖНО: прямой сиблинг #game-container, НЕ вложен в него (canvas движка
+    считает viewport из DOM-размеров #game-container/#border/#canvas, любое
+    вложение с padding/border ломает hit-тест).
+-->
+<div id="world-map">
+    <div id="world-map-header">
+        <span id="world-map-title">Карта мира</span>
+        <span id="world-map-stats">Исследовано: 0/0 (0%)</span>
+        <button id="close-world-map" type="button" aria-label="Закрыть карту">Закрыть (Esc)</button>
+    </div>
+    <div id="world-map-canvas-container">
+        <canvas id="world-map-canvas"></canvas>
+        <div id="world-map-legend">
+            <span class="legend-player">Вы</span>
+            <span class="legend-explored">Проход</span>
+            <span class="legend-wall">Препятствие</span>
+            <span class="legend-seen">Ранее</span>
+            <span class="legend-fog">Туман</span>
+        </div>
+        <div id="world-map-hint">
+            Перетаскивайте карту мышью или пальцем. Колесо / щипок — масштаб. N — открыть/закрыть.
+        </div>
+    </div>
+</div>

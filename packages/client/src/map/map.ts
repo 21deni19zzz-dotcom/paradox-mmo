@@ -141,6 +141,11 @@ export default class Map {
 
         // Store the region we just saved into our local storage.
         this.game.storage.setRegionData(data, region);
+
+        // Paradox Online Sprint 3 Заход 2 — помечаем регион как открытый на overlay
+        // карты мира. Optional chaining на случай, если welcome ещё не завершён
+        // (menu инициализируется позже этой точки).
+        this.game.menu?.getWorldMap?.().markRegionDiscovered(region);
     }
 
     /**

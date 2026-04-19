@@ -2401,6 +2401,10 @@ export default class Player extends Character {
             data.maxMana = this.mana.getMaxMana();
         }
 
+        // Paradox Online Sprint 3 Заход 2 — fog-of-war persist.
+        // Отдаём клиенту только в "полной" выдаче (welcome): нужен withExperience+withMana.
+        if (withExperience && withMana) data.discoveredRegions = this.regionsLoaded.slice();
+
         return data;
     }
 
