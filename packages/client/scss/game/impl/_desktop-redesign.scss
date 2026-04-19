@@ -1,0 +1,294 @@
+// ═══════════════════════════════════════════════════════════════════════════
+// DESKTOP REDESIGN (Sprint 1.6 — UX Pro Max)
+//
+// Проблемы с прода (desktop 2560×1400):
+// - Action-bar (8 HUD-кнопок внизу справа) слишком мелкий
+// - Открытые меню (inventory 12×15em, bank/trade/profile 32×16em) визуально
+//   занимают 5-10% экрана — нечитаемо на больших мониторах
+// - Quick-slots инвентаря в углу — микроскопичные
+//
+// Решение:
+// - Все контейнеры меню увеличены через CSS custom properties
+// - Action-bar расширен + переехал ближе к верхнему правому краю (WoW-style)
+// - Inventory в углу увеличен ×2, слоты видны чётко
+// - Player info (HP/MP) крупнее в левом-верхнем углу
+// - Применяется ТОЛЬКО для width >= 901px чтобы не конфликтовать с _mobile.scss
+// ═══════════════════════════════════════════════════════════════════════════
+
+// ── DESIGN TOKENS ─────────────────────────────────────────────────────────
+:root {
+    --pdx-menu-scale: 1.8; // множитель для открытых меню (inventory, bank, etc)
+    --pdx-hud-scale: 1.6;  // множитель для HUD-кнопок внизу
+    --pdx-slot-scale: 1.5; // множитель слотов внутри меню
+    --pdx-player-info-scale: 1.4; // HP/MP бары
+}
+
+// ── DESKTOP (>=901px, не мобильный) ────────────────────────────────────────
+@media only screen and (min-width: 901px) {
+
+    // ═══ ACTION BAR (#buttons) — главный HUD ═══
+    // Было: внизу справа, мелкий. Стало: крупный, отделённый от края
+    #buttons {
+        font-size: calc(1em * var(--pdx-hud-scale)) !important;
+        bottom: 1em !important;
+        right: 1em !important;
+        gap: 0.35em !important;
+
+        // Подкладка под иконки — заметный фон для визуальной группировки
+        padding: 0.5em 0.6em !important;
+        background: rgba(10, 8, 18, 0.75) !important;
+        border: 2px solid rgba(124, 58, 237, 0.5) !important;
+        border-radius: 0.75em !important;
+        box-shadow:
+            0 4px 20px rgba(0, 0, 0, 0.5),
+            inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+
+        li {
+            transition: transform 0.15s ease, filter 0.15s ease;
+
+            &:hover {
+                transform: translateY(-2px);
+                filter: brightness(1.3) drop-shadow(0 0 8px rgba(252, 218, 92, 0.6));
+            }
+        }
+    }
+
+    // ═══ PLAYER INFO (HP / MP) — верхний левый угол, крупнее ═══
+    #player-info {
+        font-size: calc(1em * var(--pdx-player-info-scale)) !important;
+
+        // Рамка
+        padding: 0.3em 0.5em !important;
+        background: rgba(10, 8, 18, 0.7) !important;
+        border: 2px solid rgba(0, 229, 255, 0.4) !important;
+        border-radius: 0.5em !important;
+        box-shadow:
+            0 4px 15px rgba(0, 0, 0, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+    }
+
+    // ═══ INVENTORY (в углу, quick-access) — увеличенный ═══
+    #inventory {
+        right: 2em !important;
+        bottom: calc(4em * var(--pdx-hud-scale)) !important;
+
+        width: calc(14em * var(--pdx-slot-scale)) !important;
+        height: calc(17em * var(--pdx-slot-scale)) !important;
+
+        // Визуальная рамка отдельно от action-bar
+        padding: 0.5em !important;
+        background: rgba(10, 8, 18, 0.75) !important;
+        border: 2px solid rgba(124, 58, 237, 0.5) !important;
+        border-radius: 0.75em !important;
+        box-shadow: 0 6px 25px rgba(0, 0, 0, 0.6) !important;
+    }
+
+    // ═══ ОТКРЫТЫЕ МЕНЮ — крупный scale ═══
+    // Главные контейнеры
+    .slice-container {
+        width: calc(32em * var(--pdx-menu-scale)) !important;
+        height: calc(16em * var(--pdx-menu-scale)) !important;
+        max-width: 90vw !important;
+        max-height: 85vh !important;
+
+        font-size: 1.1em !important; // крупнее текст внутри
+
+        gap: 0.75em !important;
+        padding: 1.5em !important;
+    }
+
+    .slice-container-fancy {
+        width: calc(32em * var(--pdx-menu-scale)) !important;
+        height: calc(16em * var(--pdx-menu-scale)) !important;
+        max-width: 90vw !important;
+        max-height: 85vh !important;
+
+        font-size: 1.1em !important;
+
+        gap: 0.75em !important;
+        padding: 1.75em !important;
+    }
+
+    // Профиль / equipment — slice-page (другой класс)
+    .slice-page {
+        right: 1em !important;
+
+        width: calc(22em * var(--pdx-menu-scale)) !important;
+        min-height: calc(20em * var(--pdx-menu-scale)) !important;
+        max-width: 85vw !important;
+        max-height: 85vh !important;
+
+        font-size: 1.1em !important;
+    }
+
+    // Slice-dialog (маленькие диалоги типа action-drop, trade-count)
+    .slice-dialog {
+        font-size: 1.15em !important;
+        padding: 1.5em 1em 1em !important;
+    }
+
+    // Внутренние контейнеры — больше padding'а для дыхания
+    .slice-inner-container {
+        padding: 1em !important;
+    }
+
+    // Слоты предметов — крупнее и с hover-эффектом
+    .slice-item-slot {
+        padding: 0.4em !important;
+
+        transition: transform 0.1s ease, filter 0.1s ease;
+
+        &:hover {
+            transform: scale(1.05);
+            filter: brightness(1.2);
+        }
+    }
+
+    // List-items — больше дыхания
+    .slice-list-item {
+        padding: 0.7em !important;
+    }
+
+    // Buttons в диалогах (ACCEPT, Create, Back, Submit, Continue)
+    .slice-button {
+        min-width: 8em !important;
+        min-height: 2.4em !important;
+        padding: 0.7em 1.5em !important;
+        font-size: 1.05em !important;
+
+        transition: transform 0.1s ease;
+
+        &:hover {
+            transform: translateY(-1px);
+        }
+    }
+
+    // Close buttons — чётче и крупнее
+    .close-container,
+    .close-container-fancy {
+        transform: scale(1.4) !important;
+        transform-origin: top right !important;
+    }
+
+    // Inputs в меню — удобный клик
+    .slice-input {
+        min-height: 2.2em !important;
+        padding: 0.8em 1em !important;
+        font-size: 1em !important;
+    }
+
+    // ═══ ЗАГОЛОВКИ в меню (title-decoration) ═══
+    .title-decoration {
+        font-size: 1.4em !important;
+        letter-spacing: 0.05em !important;
+    }
+
+    // ═══ CHAT — на десктопе крупнее и читаемее ═══
+    #chat {
+        width: 28em !important;
+        bottom: calc(3em * var(--pdx-hud-scale)) !important;
+        left: 1em !important;
+    }
+
+    #chat-log {
+        height: 12em !important;
+
+        p {
+            font-size: 1.15em !important;
+            line-height: 1.3 !important;
+        }
+    }
+
+    #chat-input {
+        font-size: 1.1em !important;
+        height: 1.5em !important;
+    }
+
+    // ═══ WELCOME после логина ═══
+    #welcome {
+        width: calc(28em * var(--pdx-menu-scale) * 0.9) !important;
+        height: auto !important;
+        min-height: 14em !important;
+        max-width: 85vw !important;
+        max-height: 80vh !important;
+
+        font-size: 1.05em !important;
+
+        &-info {
+            font-size: 1em !important;
+        }
+
+        &-play {
+            font-size: 1em !important;
+        }
+    }
+
+    // ═══ ZOOM buttons (нижний левый угол) ═══
+    #zoom-buttons {
+        gap: 0.5em !important;
+
+        button {
+            width: calc(2em * var(--pdx-hud-scale)) !important;
+            height: calc(2em * var(--pdx-hud-scale)) !important;
+        }
+    }
+
+    // ═══ NOTIFICATIONS — крупнее и заметнее ═══
+    #notifications {
+        font-size: 1.1em !important;
+    }
+
+    #message {
+        font-size: 1.1em !important;
+    }
+
+    #notification {
+        font-size: 1.15em !important;
+    }
+
+    // ═══ INTERACT menu (всплывающее меню вокруг NPC/item) ═══
+    #interact {
+        font-size: 1.1em !important;
+    }
+
+    // ═══ MAP / BANK / TRADE / STORE / ENCHANT — через общий .slice-container
+    // всё получает scale автоматически ═══
+}
+
+// ── БОЛЬШИЕ ЭКРАНЫ (>=1501px — десктопные мониторы) ─────────────────────────
+// Ещё крупнее для читаемости на 2K/4K
+@media only screen and (min-width: 1501px) {
+    :root {
+        --pdx-menu-scale: 2.2;
+        --pdx-hud-scale: 2.0;
+        --pdx-slot-scale: 1.8;
+        --pdx-player-info-scale: 1.7;
+    }
+
+    .slice-container,
+    .slice-container-fancy {
+        font-size: 1.2em !important;
+    }
+
+    .slice-page {
+        font-size: 1.2em !important;
+    }
+
+    .title-decoration {
+        font-size: 1.6em !important;
+    }
+
+    #chat-log p {
+        font-size: 1.25em !important;
+    }
+}
+
+// ── 4K экраны (>=2560px) — максимальный scale ──────────────────────────────
+@media only screen and (min-width: 2560px) {
+    :root {
+        --pdx-menu-scale: 2.6;
+        --pdx-hud-scale: 2.4;
+        --pdx-slot-scale: 2.0;
+        --pdx-player-info-scale: 2.0;
+    }
+}
