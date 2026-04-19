@@ -175,7 +175,7 @@ export let locales: { [K in Locale]: string } = {
     tl: 'tl-PH'
 } as const;
 
-export let defaultLocale = 'en' as const;
+export let defaultLocale = 'ru' as const;
 export let defaultResource = resources[defaultLocale];
 
 export let ns = Object.keys(defaultResource);

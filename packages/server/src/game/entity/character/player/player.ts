@@ -1131,8 +1131,10 @@ export default class Player extends Character {
         let diffX = Math.abs(this.x - x),
             diffY = Math.abs(this.y - y);
 
-        // No-clip detection if the difference is greater than 2 tiles.
-        if (diffX > 2 || diffY > 2) {
+        // Paradox: noclip threshold raised from 2 to 4 tiles to tolerate
+        // Railway-proxied WebSocket latency. Without this, legitimate players
+        // get teleported back when their click arrives a beat late.
+        if (diffX > 4 || diffY > 4) {
             this.notify(`No-clip detected at ${this.x}(${x}), ${this.y}(${y}). Please relog.`);
 
             this.cheatScore++;
@@ -1161,8 +1163,8 @@ export default class Player extends Character {
         let diffX = Math.abs(this.x - x),
             diffY = Math.abs(this.y - y);
 
-        // Refuse any movement if the starting point mismatches our player's position by more than 2 tiles.
-        if (diffX > 2 || diffY > 2) return;
+        // Paradox: raised from 2 to 4 tiles to tolerate Railway WebSocket latency.
+        if (diffX > 4 || diffY > 4) return;
 
         this.movementStart = Date.now();
 
