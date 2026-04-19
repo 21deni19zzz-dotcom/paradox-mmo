@@ -11,7 +11,7 @@ dockerfilePath = "Dockerfile"
 # env vars reach the Config object at runtime.
 # cd into /app/packages/server so config.ts's `../../.env.defaults` path
 # resolves to /app/.env.defaults (matches the monorepo dev layout).
-startCommand = "cd /app/packages/server && node --enable-source-maps dist/main.js"
+startCommand = "node --enable-source-maps dist/main.js"
 
 # uWS's httpResponse handler serves /app/client-dist/index.html on GET /
 # → Railway's HTTP healthcheck will see 200 OK once the server is up.
