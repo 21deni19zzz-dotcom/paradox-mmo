@@ -54,7 +54,10 @@ export default class QuickSlots {
      */
 
     private handleAbility(key: string, level: number, quickSlot = -1): void {
-        // Bar is always visible in Paradox (no hidden/fade-in toggle).
+        this.abilityBar.hidden = false;
+
+        // This is in order to give the ability bar a fade in effect when it first appears.
+        setTimeout(() => (this.abilityBar.style.opacity = '1'), 100);
 
         // No quick slot identification.
         if (quickSlot === -1) return;

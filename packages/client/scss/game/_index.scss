@@ -34,8 +34,6 @@
 @use 'impl/zoom';
 @use 'impl/quest';
 @use 'impl/inappstore';
-@use 'impl/desktop-redesign'; // UX Pro Max scaling
-@use 'impl/sprint2-layout'; // Sprint 2 — HUD layout, z-index, quickslots
 
 body.game {
     background: #000;
