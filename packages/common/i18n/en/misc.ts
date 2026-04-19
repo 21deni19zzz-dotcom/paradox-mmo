@@ -78,5 +78,16 @@ export default {
     TRADE_COMPLETE: 'Thank you for using Kaetram trading system!',
     WELCOME: 'Welcome to {{name}}!',
     WELCOME_BACK: 'Welcome back to {{name}}!',
-    WHY_GO_THERE: 'Now hang on, why would I wanna go in there?'
+    WHY_GO_THERE: 'Now hang on, why would I wanna go in there?',
+    UI_NEW_CHARACTER: 'New Character',
+    UI_USERNAME: 'Username',
+    UI_PASSWORD: 'Password',
+    UI_CONFIRM_PASSWORD: 'Confirm Password',
+    UI_EMAIL: 'Email Address',
+    UI_LOGIN: 'LOGIN',
+    UI_NEW_ACCOUNT: 'NEW ACCOUNT',
+    UI_CANCEL: 'CANCEL',
+    UI_PLAY: 'PLAY',
+    UI_REMEMBER_ME: 'Remember Me',
+    UI_PLAY_AS_GUEST: 'Play as a guest'
 } as const;

@@ -235,7 +235,8 @@ export default {
      */
 
     isValidUsername(text: string): boolean {
-        return /^[\w ]+$/.test(text);
+        // Paradox: allow Unicode letters (including Cyrillic), digits, spaces and underscores.
+        return /^[\p{L}\p{N}_ ]+$/u.test(text);
     },
 
     /**

@@ -25,8 +25,8 @@ let currentLanguage = getLanguage(),
                     id="login-name-input"
                     class="stroke slice-input"
                     name="player-name"
-                    placeholder="Username"
-                    aria-label="Username"
+                    placeholder={t("misc:UI_USERNAME")}
+                    aria-label={t("misc:UI_USERNAME")}
                     maxlength="32"
                     autocomplete="off"
                 />
@@ -35,8 +35,8 @@ let currentLanguage = getLanguage(),
                     id="login-password-input"
                     class="stroke slice-input"
                     name="player-password"
-                    placeholder="Password"
-                    aria-label="Password"
+                    placeholder={t("misc:UI_PASSWORD")}
+                    aria-label={t("misc:UI_PASSWORD")}
                     maxlength="64"
                     autocomplete="off"
                 />
@@ -48,42 +48,42 @@ let currentLanguage = getLanguage(),
                         <input type="checkbox" aria-labelledby="remember-me-text" />
                         <span class="checkmark"></span>
 
-                        <span id="remember-me-text">Remember Me</span>
+                        <span id="remember-me-text">{t("misc:UI_REMEMBER_ME")}</span>
                     </label>
                     <label id="guest" class="check">
                         <input type="checkbox" aria-labelledby="guest-text" />
                         <span class="checkmark"></span>
 
-                        <span id="guest-text">Play as a guest</span>
+                        <span id="guest-text">{t("misc:UI_PLAY_AS_GUEST")}</span>
                     </label>
                 </div>
 
                 <div class="button-row">
                     <button
-                        title="Login"
-                        aria-label="Login"
+                        title={t("misc:UI_LOGIN")}
+                        aria-label={t("misc:UI_LOGIN")}
                         type="submit"
                         id="login"
                         class="stroke slice-button"
                         disabled
                     >
-                        LOGIN
+                        {t("misc:UI_LOGIN")}
                     </button>
                     <button
-                        title="New Account"
-                        aria-label="New Account"
+                        title={t("misc:UI_NEW_ACCOUNT")}
+                        aria-label={t("misc:UI_NEW_ACCOUNT")}
                         type="button"
                         id="new-account"
                         class="stroke slice-button"
                     >
-                        NEW ACCOUNT
+                        {t("misc:UI_NEW_ACCOUNT")}
                     </button>
                 </div>
             </form>
         </article>
 
         <article id="create-character">
-            <h1 class="title-decoration">New Character</h1>
+            <h1 class="title-decoration">{t("misc:UI_NEW_CHARACTER")}</h1>
 
             <form onsubmit={'return false'}>
                 <input
@@ -91,8 +91,8 @@ let currentLanguage = getLanguage(),
                     id="register-name-input"
                     class="stroke slice-input"
                     name="player-name"
-                    placeholder="Username"
-                    aria-label="Username"
+                    placeholder={t("misc:UI_USERNAME")}
+                    aria-label={t("misc:UI_USERNAME")}
                     maxlength="32"
                     autocomplete="off"
                 />
@@ -101,8 +101,8 @@ let currentLanguage = getLanguage(),
                     id="register-password-input"
                     class="stroke slice-input"
                     name="player-password"
-                    placeholder="Password"
-                    aria-label="Password"
+                    placeholder={t("misc:UI_PASSWORD")}
+                    aria-label={t("misc:UI_PASSWORD")}
                     maxlength="64"
                     autocomplete="off"
                 />
@@ -111,8 +111,8 @@ let currentLanguage = getLanguage(),
                     id="register-password-confirmation-input"
                     class="stroke slice-input"
                     name="player-password2"
-                    placeholder="Confirm Password"
-                    aria-label="Confirm Password"
+                    placeholder={t("misc:UI_CONFIRM_PASSWORD")}
+                    aria-label={t("misc:UI_CONFIRM_PASSWORD")}
                     maxlength="64"
                     autocomplete="off"
                 />
@@ -121,8 +121,8 @@ let currentLanguage = getLanguage(),
                     id="register-email-input"
                     class="stroke slice-input"
                     name="player-email"
-                    placeholder="Email Address"
-                    aria-label="Email Address"
+                    placeholder={t("misc:UI_EMAIL")}
+                    aria-label={t("misc:UI_EMAIL")}
                     maxlength="64"
                     autocomplete="off"
                 />
@@ -131,22 +131,22 @@ let currentLanguage = getLanguage(),
 
                 <div class="button-row">
                     <button
-                        title="Cancel"
-                        aria-label="Cancel"
+                        title={t("misc:UI_CANCEL")}
+                        aria-label={t("misc:UI_CANCEL")}
                         type="button"
                         id="cancel-register"
                         class="stroke slice-button"
                     >
-                        CANCEL
+                        {t("misc:UI_CANCEL")}
                     </button>
                     <button
-                        title="Play"
-                        aria-label="Play"
+                        title={t("misc:UI_PLAY")}
+                        aria-label={t("misc:UI_PLAY")}
                         type="submit"
                         id="play"
                         class="stroke slice-button"
                     >
-                        PLAY
+                        {t("misc:UI_PLAY")}
                     </button>
                 </div>
             </form>
@@ -165,8 +165,8 @@ let currentLanguage = getLanguage(),
                     id="email-reset-input"
                     class="stroke slice-input"
                     name="player-email"
-                    placeholder="Email Address"
-                    aria-label="Email Address"
+                    placeholder={t("misc:UI_EMAIL")}
+                    aria-label={t("misc:UI_EMAIL")}
                     maxlength="32"
                     autocomplete="off"
                 />
@@ -175,13 +175,13 @@ let currentLanguage = getLanguage(),
 
                 <div class="button-row">
                     <button
-                        title="Cancel"
-                        aria-label="Cancel"
+                        title={t("misc:UI_CANCEL")}
+                        aria-label={t("misc:UI_CANCEL")}
                         type="button"
                         id="cancel-forget"
                         class="stroke slice-button"
                     >
-                        CANCEL
+                        {t("misc:UI_CANCEL")}
                     </button>
                     <button
                         title="Submit"
@@ -208,13 +208,13 @@ let currentLanguage = getLanguage(),
 
                 <div class="button-row">
                     <button
-                        title="Cancel"
-                        aria-label="Cancel"
+                        title={t("misc:UI_CANCEL")}
+                        aria-label={t("misc:UI_CANCEL")}
                         type="button"
                         id="cancel-worlds"
                         class="stroke slice-button"
                     >
-                        CANCEL
+                        {t("misc:UI_CANCEL")}
                     </button>
                     <button
                         title="Continue"
