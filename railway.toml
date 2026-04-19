@@ -6,12 +6,17 @@ builder = "DOCKERFILE"
 dockerfilePath = "Dockerfile"
 
 [deploy]
-# /app/docker-entrypoint.sh materialises Railway env vars -> .env and then
-# execs the server. Kaetram's dotenv-extended doesn't read process.env directly.
-startCommand = "/app/docker-entrypoint.sh"
-# uWS returns 200 OK for GET / when serving the client index.html → healthcheck passes
+# Run the server directly. Kaetram's dotenv-extended is patched in
+# packages/common/config.ts (includeProcessEnv: true) so Railway-injected
+# env vars reach the Config object at runtime.
+# cd into /app/packages/server so config.ts's `../../.env.defaults` path
+# resolves to /app/.env.defaults (matches the monorepo dev layout).
+startCommand = "cd /app/packages/server && node --enable-source-maps dist/main.js"
+
+# uWS's httpResponse handler serves /app/client-dist/index.html on GET /
+# → Railway's HTTP healthcheck will see 200 OK once the server is up.
 healthcheckPath = "/"
-healthcheckTimeout = 100
+healthcheckTimeout = 300
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 5
 numReplicas = 1
