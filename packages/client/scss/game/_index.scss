@@ -38,8 +38,6 @@
 @use 'impl/animations';
 // Golden UI — последним. Единый дизайн-язык для всех меню-оверлеев.
 @use 'impl/golden-ui';
-// Golden UI overhaul — САМЫЙ последний, переопределяет slice-стили
-@use 'impl/golden-ui';
 
 body.game {
     background: #000;
