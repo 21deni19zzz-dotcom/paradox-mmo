@@ -25,8 +25,8 @@
 
     box-sizing: border-box;
     min-width: 22em; // было 18em — дополнительный воздух вокруг inventory
-    min-height: 18em; // было 14em — убираем «низкую» форму
-    padding: 2.75em 2em 1.75em; // было 2em/1.5em/1.25em — больше воздуха сверху под заголовок
+    min-height: 20em; // было 14em → 18em (overflow) → 20em; учитывает padding 4.5em + inventory 15em = 19.5em
+    padding: 2.5em 2em 1.5em; // воздух сверху для title, меньше снизу — inventory ближе к низу рамки
 
     color: #eee;
 
@@ -131,10 +131,10 @@
         position: relative;
         inset: auto;
 
-        // Увеличено с 12em × 15em до 16em × 16em — крупнее слоты,
-        // более весомый и эстетически сбалансированный 5×5 вид внутри рамки dock'а.
-        width: 16em;
-        height: 16em;
+        // Нативный Kaetram-размер 12em × 15em, чуть расширен до 13em для воздуха.
+        // grid-auto-rows:1fr даёт прямоугольные слоты — принудительный квадрат ломал пропорции.
+        width: 13em;
+        height: 15em; // возврат к нативному Kaetram — grid 5x5 при grid-auto-rows:1fr не растягивается
         margin: 0;
     }
 
@@ -182,8 +182,8 @@
 
     position: absolute;
 
-    width: 0.6em; // было 0.45em — крупнее клёпки, заметнее на рамке
-    height: 0.6em;
+    width: 0.5em; // было 0.45em → 0.6em (слишком крупно) → 0.5em
+    height: 0.5em;
 
     background: radial-gradient(circle, #f4d77a 0%, #c9a24a 55%, #6b5020 100%);
     border-radius: 50%;
@@ -191,13 +191,13 @@
 }
 
 #paradox-dock::before {
-    top: 0.55em;
-    left: 0.55em;
+    top: 0.5em;
+    left: 0.5em;
 }
 
 #paradox-dock::after {
-    right: 0.55em;
-    bottom: 0.55em;
+    right: 0.5em;
+    bottom: 0.5em;
 }
 
 // Мобильный вариант — весь экран почти, но с отступами.
