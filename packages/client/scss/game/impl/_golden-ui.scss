@@ -169,21 +169,19 @@ body #settings-page,
 body #quests,
 body #achievements,
 body #equipments {
-    // Единая позиция-док справа
+    // Единая позиция-док справа. Используем inset shorthand (top right bottom left)
+    // чтобы перебить .slice-container { inset: 0 } без конфликта с cssnano-
+    // оптимизатором (который склеивал 4 свойства в 'inset: auto' удаляя их).
     position: absolute;
-    top: 1em;
-    right: 5em;
-    bottom: 1em;
-    left: auto;
+    inset: 1em 5em 1em auto;
 
-    // Единые размеры — адаптируется к высоте экрана
+    // Единые размеры
     width: 24em;
     height: auto;
     max-height: calc(100vh - 2em);
     margin: 0;
-    inset: auto;
 
-    // Единая шторка-анимация (перезапустится при каждом display:none→flex)
+    // Единая шторка-анимация
     animation: paradox-dock-slide-in 0.4s cubic-bezier(0.25, 0.8, 0.4, 1);
 }
 
@@ -210,11 +208,8 @@ body #equipments {
     body #quests,
     body #achievements,
     body #equipments {
-        top: 0.5em;
-        right: 0.5em;
-        bottom: 0.5em;
-        left: auto;
-        width: calc(100vw - 6em); // оставляем 5em под action-bar + немного
+        inset: 0.5em 0.5em 0.5em auto;
+        width: calc(100vw - 6em);
         max-width: 24em;
     }
 }
