@@ -1,0 +1,69 @@
+// ────────────────────────────────────────────────────────────────────────────
+// Paradox Online · Sprint 2 v2 · Плавные анимации открытия меню
+//
+// Подход: CSS-only keyframes на transform. Opacity управляется из Util.fadeIn/
+// fadeOut через requestAnimationFrame (inline style) — НЕ конфликтует с моими
+// transform-анимациями. При смене display: none → display: flex CSS-анимация
+// перезапускается автоматически.
+//
+// НЕ трогаем: #canvas, #game-container, #border, #world-map (у него своя логика),
+// HUD-элементы (#buttons, #health, #mana). Анимируем только ОВЕРЛЕИ меню.
+// ────────────────────────────────────────────────────────────────────────────
+
+@keyframes paradox-menu-slide-in {
+    from {
+        transform: translateY(-0.6em) scale(0.97);
+    }
+    to {
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes paradox-menu-slide-in-right {
+    from {
+        transform: translateX(1em) scale(0.97);
+    }
+    to {
+        transform: translateX(0) scale(1);
+    }
+}
+
+// Общий slide-in для модалок и диалогов.
+.slice-container,
+.slice-dialog,
+.slice-page {
+    animation: paradox-menu-slide-in 0.25s cubic-bezier(0.25, 0.8, 0.4, 1);
+}
+
+// Меню, закреплённые у правого края (inventory, profile, friends, settings) —
+// slide справа.
+#inventory,
+#profile-container,
+#friends-container,
+#settings-page,
+#quests-container,
+#achievements,
+#equipments,
+#guilds,
+#leaderboards,
+#bank,
+#store,
+#trade,
+#crafting,
+#lootbag,
+#enchant {
+    animation: paradox-menu-slide-in-right 0.28s cubic-bezier(0.25, 0.8, 0.4, 1);
+}
+
+// Чуть более "сочный" эффект при hover на HUD-кнопках (action-bar правый край).
+#buttons li {
+    transition: transform 0.15s ease;
+
+    &:hover {
+        transform: translateX(-0.15em) scale(1.05);
+    }
+
+    &:active {
+        transform: translateX(-0.05em) scale(0.98);
+    }
+}
