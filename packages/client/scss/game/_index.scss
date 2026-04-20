@@ -35,9 +35,8 @@
 @use 'impl/zoom';
 @use 'impl/quest';
 @use 'impl/inappstore';
+// Animations — последним импортом чтобы стили переопределяли предыдущие при тех же селекторах
 @use 'impl/animations';
-// Golden UI — последним. Единый дизайн-язык для всех меню-оверлеев.
-@use 'impl/golden-ui';
 
 body.game {
     background: #000;
