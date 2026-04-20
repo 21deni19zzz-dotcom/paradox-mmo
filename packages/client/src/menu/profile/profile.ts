@@ -2,6 +2,7 @@ import State from './impl/state';
 import Skills from './impl/skills';
 
 import Menu from '../menu';
+import ParadoxDock from '../paradoxDock';
 
 import type Player from '../../entity/character/player/player';
 import type { Modules } from '@kaetram/common/network';
@@ -54,6 +55,18 @@ export default class Profile extends Menu {
     }
 
     /**
+     * Paradox Online Sprint 2 Заход 3.2 · Paradox Dock wrapping.
+     */
+
+    public override show(): void {
+        let dock = ParadoxDock.getInstance();
+
+        if (dock && !dock.isVisible()) dock.show('Профиль', this.container, () => this.hide());
+
+        super.show();
+    }
+
+    /**
      * Override for the `hide` function to include hiding the side menu panel.
      */
 
@@ -61,6 +74,8 @@ export default class Profile extends Menu {
         super.hide();
 
         this.skills.hideInfo();
+
+        ParadoxDock.getInstance()?.hide();
     }
 
     /**

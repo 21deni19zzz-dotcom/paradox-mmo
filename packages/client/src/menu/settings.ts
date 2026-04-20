@@ -1,4 +1,5 @@
 import Menu from './menu';
+import ParadoxDock from './paradoxDock';
 
 import { isMobile, isMacintoshFirefox } from '../utils/detect';
 
@@ -60,6 +61,24 @@ export default class Settings extends Menu {
         this.fpsThrottleDropdown.addEventListener('change', this.handleFpsThrottle.bind(this));
 
         this.load();
+    }
+
+    /**
+     * Paradox Online Sprint 2 Заход 3.2 · Paradox Dock wrapping.
+     */
+
+    public override show(): void {
+        let dock = ParadoxDock.getInstance();
+
+        if (dock && !dock.isVisible()) dock.show('Настройки', this.container, () => this.hide());
+
+        super.show();
+    }
+
+    public override hide(): void {
+        super.hide();
+
+        ParadoxDock.getInstance()?.hide();
     }
 
     /**

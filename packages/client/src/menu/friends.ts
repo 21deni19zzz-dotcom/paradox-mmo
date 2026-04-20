@@ -1,4 +1,5 @@
 import Menu from './menu';
+import ParadoxDock from './paradoxDock';
 
 import Util from '../utils/util';
 import { isLargeScreen } from '../utils/detect';
@@ -54,6 +55,24 @@ export default class Friends extends Menu {
 
         this.confirm.addEventListener('click', this.handleConfirm.bind(this));
         this.cancel.addEventListener('click', this.hidePopup.bind(this));
+    }
+
+    /**
+     * Paradox Online Sprint 2 Заход 3.2 · Paradox Dock wrapping.
+     */
+
+    public override show(): void {
+        let dock = ParadoxDock.getInstance();
+
+        if (dock && !dock.isVisible()) dock.show('Друзья', this.container, () => this.hide());
+
+        super.show();
+    }
+
+    public override hide(): void {
+        super.hide();
+
+        ParadoxDock.getInstance()?.hide();
     }
 
     /**

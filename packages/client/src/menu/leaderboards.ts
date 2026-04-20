@@ -1,4 +1,5 @@
 import Menu from './menu';
+import ParadoxDock from './paradoxDock';
 
 import log from '../lib/log';
 
@@ -144,6 +145,10 @@ export default class Leaderboards extends Menu {
      */
 
     public override show(): void {
+        let dock = ParadoxDock.getInstance();
+
+        if (dock && !dock.isVisible()) dock.show('Рейтинг', this.container, () => this.hide());
+
         super.show();
 
         this.searchList.scrollTop = 0;
@@ -159,6 +164,8 @@ export default class Leaderboards extends Menu {
 
         // Clear the input field
         this.search.value = '';
+
+        ParadoxDock.getInstance()?.hide();
     }
 
     /**

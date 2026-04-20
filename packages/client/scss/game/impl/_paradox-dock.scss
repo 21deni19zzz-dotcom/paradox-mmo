@@ -12,12 +12,16 @@
 
 // Сам dock — прозрачный оверлей по центру экрана.
 #paradox-dock {
-    position: fixed;
+    pointer-events: none;
 
+    position: fixed;
+    z-index: 150; // на уровне worldMap overlay, ниже modals (200)
     top: 50%;
     left: 50%;
 
-    z-index: 150; // на уровне worldMap overlay, ниже modals (200)
+    // Закрытое состояние по умолчанию — transform+opacity, без display:none
+    // чтобы анимация срабатывала обратно при show().
+    transform: translate(-50%, -50%) scale(0.92);
 
     box-sizing: border-box;
     min-width: 18em;
@@ -26,56 +30,50 @@
 
     color: #eee;
 
+    opacity: 0;
+
     // Kaetram-совместимый 9-slice: используем существующий container-fancy.png
     // (см. skill §5 — "правильный подход: border-image без padding/border на HUD").
     border-image: url('/img/interface/slices/container-fancy.png') 44% fill / 4.75em / 0 stretch;
-
-    // Закрытое состояние по умолчанию — transform+opacity, без display:none
-    // чтобы анимация срабатывала обратно при show().
-    transform: translate(-50%, -50%) scale(0.92);
-    opacity: 0;
 
     transition:
         transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
         opacity 0.25s ease;
 
-    pointer-events: none;
-
     &.paradox-dock-visible {
+        pointer-events: auto;
         transform: translate(-50%, -50%) scale(1);
         opacity: 1;
-
-        pointer-events: auto;
     }
 }
 
 // Заголовок dock'а — название текущего меню.
 #paradox-dock-title {
-    position: absolute;
+    pointer-events: none;
 
+    position: absolute;
     top: 0.5em;
     right: 2.5em;
     left: 1em;
 
     overflow: hidden;
 
-    color: #f5e6c8;
     font-size: 1em;
     font-weight: bold;
+    color: #f5e6c8;
     text-align: center;
     text-overflow: ellipsis;
     text-shadow: 1px 1px 0 #000;
     text-transform: uppercase;
-    white-space: nowrap;
     letter-spacing: 0.08em;
-
-    pointer-events: none;
+    white-space: nowrap;
 }
 
 // Кнопка закрытия.
 #paradox-dock-close {
-    position: absolute;
+    cursor: pointer;
 
+    position: absolute;
     top: 0.4em;
     right: 0.5em;
 
@@ -83,22 +81,21 @@
     height: 1.6em;
     padding: 0;
 
-    color: #f5e6c8;
     font-size: 1em;
     font-weight: bold;
     line-height: 1;
+    color: #f5e6c8;
 
     background: transparent;
     border: none;
-    cursor: pointer;
 
     &::before {
         content: '✕';
     }
 
     &:hover {
-        color: #fff;
         transform: scale(1.15);
+        color: #fff;
     }
 
     &:active {
@@ -122,7 +119,6 @@
     // Specificity = 0,3,0 (три ID) > 0,1,0 оригинала — без !important.
     & > #inventory {
         position: relative;
-
         inset: auto;
 
         // Убираем оригинальный display:none только внутри dock'a — dock сам управляет видимостью.
@@ -132,12 +128,49 @@
         height: 15em;
         margin: 0;
     }
+
+    // Paradox Online Sprint 2 Заход 3.2 · правила для остальных 7 меню.
+    // Все они наследуют схему: position:relative (вместо absolute), inset:auto,
+    // display:flex для восстановления внутренней layout, размеры соответствуют
+    // дефолтам Kaetram slice-container / slice-page.
+    & > #profile-container,
+    & > #settings-page,
+    & > #quests,
+    & > #friends-container,
+    & > #guilds,
+    & > #achievements,
+    & > #leaderboards {
+        position: relative;
+        inset: auto;
+        display: flex;
+        margin: 0;
+
+        // Kaetram slice-container по умолчанию 32em × 16em (см. _slice.scss),
+        // dock-frame сам снабжает декоративную рамку, так что внутренним контейнерам
+        // рамка не нужна — она идёт от родителя.
+    }
+
+    // Мобильные корректировки для 7 меню.
+    @media (--portrait) {
+        & > #profile-container,
+        & > #settings-page,
+        & > #quests,
+        & > #friends-container,
+        & > #guilds,
+        & > #achievements,
+        & > #leaderboards {
+            width: 100%;
+            min-height: 18em;
+        }
+    }
 }
 
 // Клёпки по углам — золотые круглые декоративные элементы.
 #paradox-dock::before,
 #paradox-dock::after {
+    pointer-events: none;
     content: '';
+
     position: absolute;
 
     width: 0.45em;
@@ -145,8 +178,6 @@
 
     background: radial-gradient(circle, #f4d77a 0%, #c9a24a 55%, #6b5020 100%);
     border-radius: 50%;
-
-    pointer-events: none;
 }
 
 #paradox-dock::before {

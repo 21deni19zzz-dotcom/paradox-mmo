@@ -1,4 +1,5 @@
 import Menu from './menu';
+import ParadoxDock from './paradoxDock';
 
 import Util from '../utils/util';
 
@@ -721,6 +722,10 @@ export default class Guilds extends Menu {
      */
 
     public override show(): void {
+        let dock = ParadoxDock.getInstance();
+
+        if (dock && !dock.isVisible()) dock.show('Гильдия', this.container, () => this.hide());
+
         super.show();
 
         // No guild so we request a list of active guilds.
@@ -742,6 +747,8 @@ export default class Guilds extends Menu {
 
         // Hide the create interface if the player is not in a guild.
         if (!this.game.player.guild) this.handleBackButton();
+
+        ParadoxDock.getInstance()?.hide();
     }
 
     /**

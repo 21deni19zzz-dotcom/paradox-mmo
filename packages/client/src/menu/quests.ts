@@ -1,4 +1,5 @@
 import Menu from './menu';
+import ParadoxDock from './paradoxDock';
 
 import { Modules, Opcodes } from '@kaetram/common/network';
 
@@ -23,6 +24,24 @@ export default class Quests extends Menu {
 
     public constructor(private player: Player) {
         super('#quests', '#close-quests', '#quests-button');
+    }
+
+    /**
+     * Paradox Online Sprint 2 Заход 3.2 · Paradox Dock wrapping.
+     */
+
+    public override show(): void {
+        let dock = ParadoxDock.getInstance();
+
+        if (dock && !dock.isVisible()) dock.show('Квесты', this.container, () => this.hide());
+
+        super.show();
+    }
+
+    public override hide(): void {
+        super.hide();
+
+        ParadoxDock.getInstance()?.hide();
     }
 
     /**

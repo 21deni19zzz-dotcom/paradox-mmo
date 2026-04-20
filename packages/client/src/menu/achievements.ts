@@ -1,4 +1,5 @@
 import Menu from './menu';
+import ParadoxDock from './paradoxDock';
 
 import { Modules, Opcodes } from '@kaetram/common/network';
 
@@ -29,6 +30,24 @@ export default class Achievements extends Menu {
 
         this.tabArrowLeft.addEventListener('click', this.handleTabArrowLeft.bind(this));
         this.tabArrowRight.addEventListener('click', this.handleTabArrowRight.bind(this));
+    }
+
+    /**
+     * Paradox Online Sprint 2 Заход 3.2 · Paradox Dock wrapping.
+     */
+
+    public override show(): void {
+        let dock = ParadoxDock.getInstance();
+
+        if (dock && !dock.isVisible()) dock.show('Достижения', this.container, () => this.hide());
+
+        super.show();
+    }
+
+    public override hide(): void {
+        super.hide();
+
+        ParadoxDock.getInstance()?.hide();
     }
 
     /**
