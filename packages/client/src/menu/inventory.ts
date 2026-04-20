@@ -1,4 +1,5 @@
 import Menu from './menu';
+import ParadoxDock from './paradoxDock';
 
 import log from '../lib/log';
 import Util from '../utils/util';
@@ -320,6 +321,21 @@ export default class Inventory extends Menu {
     }
 
     /**
+     * Paradox Online Sprint 2 Заход 3 · Paradox Dock integration.
+     * Перед тем как показать инвентарь, переносим #inventory в декоративную рамку dock'а
+     * (физический DOM move, skill §10.1). Dock при закрытии через ✕ или Esc вызовёт
+     * переданный onClose → this.hide() → super.hide() → dock.hide() → DOM restore.
+     */
+
+    public override show(): void {
+        let dock = ParadoxDock.getInstance();
+
+        if (dock && !dock.isVisible()) dock.show('Инвентарь', this.container, () => this.hide());
+
+        super.show();
+    }
+
+    /**
      * Sets the body's display style to `none` and
      * clears all the items from the bank user interface.
      */
@@ -331,6 +347,9 @@ export default class Inventory extends Menu {
         this.selectedSlot = -1;
 
         this.actions.hide();
+
+        // Paradox Dock slide-out + возврат DOM-узла в исходный parent (#border).
+        ParadoxDock.getInstance()?.hide();
     }
 
     /**

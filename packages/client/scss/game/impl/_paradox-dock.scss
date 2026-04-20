@@ -1,0 +1,173 @@
+// Paradox Online · Sprint 2 Заход 3 · Paradox Dock.
+//
+// Dock — прямой потомок <body>, сиблинг #game-container. НЕ вложен в #border/#canvas/#game-container
+// (см. skill kaetram-mmo §5, §10.1). Показывает Kaetram-меню в едином стилизованном обрамлении
+// за счёт физического перемещения DOM-узла (#inventory и т.п.) внутрь #paradox-dock-body
+// на время открытия, с возвратом в исходную позицию при закрытии (см. paradoxDock.ts).
+//
+// НИ ОДИН селектор в этом файле НЕ касается #game-container, #border, #canvas — это критическое
+// правило после отката Sprint 2 v2 (Golden UI revert commit 41f933d).
+
+@use '../../abstracts/media';
+
+// Сам dock — прозрачный оверлей по центру экрана.
+#paradox-dock {
+    position: fixed;
+
+    top: 50%;
+    left: 50%;
+
+    z-index: 150; // на уровне worldMap overlay, ниже modals (200)
+
+    box-sizing: border-box;
+    min-width: 18em;
+    min-height: 14em;
+    padding: 2em 1.5em 1.25em;
+
+    color: #eee;
+
+    // Kaetram-совместимый 9-slice: используем существующий container-fancy.png
+    // (см. skill §5 — "правильный подход: border-image без padding/border на HUD").
+    border-image: url('/img/interface/slices/container-fancy.png') 44% fill / 4.75em / 0 stretch;
+
+    // Закрытое состояние по умолчанию — transform+opacity, без display:none
+    // чтобы анимация срабатывала обратно при show().
+    transform: translate(-50%, -50%) scale(0.92);
+    opacity: 0;
+
+    transition:
+        transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+        opacity 0.25s ease;
+
+    pointer-events: none;
+
+    &.paradox-dock-visible {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+
+        pointer-events: auto;
+    }
+}
+
+// Заголовок dock'а — название текущего меню.
+#paradox-dock-title {
+    position: absolute;
+
+    top: 0.5em;
+    right: 2.5em;
+    left: 1em;
+
+    overflow: hidden;
+
+    color: #f5e6c8;
+    font-size: 1em;
+    font-weight: bold;
+    text-align: center;
+    text-overflow: ellipsis;
+    text-shadow: 1px 1px 0 #000;
+    text-transform: uppercase;
+    white-space: nowrap;
+    letter-spacing: 0.08em;
+
+    pointer-events: none;
+}
+
+// Кнопка закрытия.
+#paradox-dock-close {
+    position: absolute;
+
+    top: 0.4em;
+    right: 0.5em;
+
+    width: 1.6em;
+    height: 1.6em;
+    padding: 0;
+
+    color: #f5e6c8;
+    font-size: 1em;
+    font-weight: bold;
+    line-height: 1;
+
+    background: transparent;
+    border: none;
+    cursor: pointer;
+
+    &::before {
+        content: '✕';
+    }
+
+    &:hover {
+        color: #fff;
+        transform: scale(1.15);
+    }
+
+    &:active {
+        transform: scale(0.95);
+    }
+}
+
+// Тело dock'а — контейнер, куда переносится Kaetram-меню (#inventory и др.)
+#paradox-dock-body {
+    position: relative;
+
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+
+    width: 100%;
+    min-height: 11em;
+
+    // Когда Kaetram-#inventory физически перенесён внутрь dock'а — перекрываем его
+    // абсолютное позиционирование (top/right/bottom/left = 1em) на relative-обтекание.
+    // Specificity = 0,3,0 (три ID) > 0,1,0 оригинала — без !important.
+    & > #inventory {
+        position: relative;
+
+        inset: auto;
+
+        // Убираем оригинальный display:none только внутри dock'a — dock сам управляет видимостью.
+        display: block;
+
+        width: 12em;
+        height: 15em;
+        margin: 0;
+    }
+}
+
+// Клёпки по углам — золотые круглые декоративные элементы.
+#paradox-dock::before,
+#paradox-dock::after {
+    content: '';
+    position: absolute;
+
+    width: 0.45em;
+    height: 0.45em;
+
+    background: radial-gradient(circle, #f4d77a 0%, #c9a24a 55%, #6b5020 100%);
+    border-radius: 50%;
+
+    pointer-events: none;
+}
+
+#paradox-dock::before {
+    top: 0.45em;
+    left: 0.45em;
+}
+
+#paradox-dock::after {
+    right: 0.45em;
+    bottom: 0.45em;
+}
+
+// Мобильный вариант — весь экран почти, но с отступами.
+@media (--portrait) {
+    #paradox-dock {
+        min-width: 90vw;
+        max-width: 95vw;
+    }
+
+    #paradox-dock-body > #inventory {
+        width: 100%;
+        height: 18em;
+    }
+}

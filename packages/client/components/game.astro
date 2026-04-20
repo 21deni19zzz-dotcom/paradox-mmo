@@ -976,3 +976,16 @@
         </div>
     </div>
 </div>
+
+<!--
+    Paradox Online · Sprint 2 Заход 3 · Paradox Dock.
+    Универсальный декоративный контейнер для Kaetram-меню (inventory и др.).
+    Прямой сиблинг #game-container — НЕ вложен в #border/#canvas (skill §5, §10.1).
+    При открытии меню JS физически переносит его DOM-узел внутрь #paradox-dock-body,
+    при закрытии — возвращает в исходную позицию. См. menu/paradoxDock.ts.
+-->
+<div id="paradox-dock">
+    <div id="paradox-dock-title"></div>
+    <button id="paradox-dock-close" type="button" aria-label="Закрыть"></button>
+    <div id="paradox-dock-body"></div>
+</div>

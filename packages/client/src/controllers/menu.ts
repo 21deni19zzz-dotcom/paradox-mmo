@@ -21,6 +21,7 @@ import LootBag from '../menu/lootbag';
 import Welcome from '../menu/welcome';
 import Quest from '../menu/quest';
 import WorldMap from '../menu/worldMap';
+import ParadoxDock from '../menu/paradoxDock';
 
 import { Modules, Opcodes, Packets } from '@kaetram/common/network';
 
@@ -51,12 +52,17 @@ export default class MenuController {
     private welcome: Welcome;
     private quest: Quest;
     private worldMap: WorldMap;
+    private paradoxDock: ParadoxDock;
 
     public header: Header;
 
     public menus: { [key: string]: Menu };
 
     public constructor(private game: Game) {
+        // Paradox Dock создаётся первым — остальные меню (Inventory) могут ссылаться на него
+        // через ParadoxDock.getInstance() в своих show()/hide().
+        this.paradoxDock = new ParadoxDock();
+
         this.crafting = new Crafting(game.player);
         this.inventory = new Inventory(this.actions);
         this.bank = new Bank(this.inventory);
@@ -338,6 +344,15 @@ export default class MenuController {
 
     public getWorldMap(): WorldMap {
         return this.worldMap;
+    }
+
+    /**
+     * @returns The Paradox Dock decorative frame controller (Paradox Online Sprint 2 Заход 3).
+     * Dock не включён в this.menus, т.к. не наследует базовый Menu (он wrapper, не меню).
+     */
+
+    public getParadoxDock(): ParadoxDock {
+        return this.paradoxDock;
     }
 
     /**
