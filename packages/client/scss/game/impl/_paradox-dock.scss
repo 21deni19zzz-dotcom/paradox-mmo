@@ -55,10 +55,13 @@
 // Значения рассчитаны как: Kaetram-native width/height + 4em padding (2em по каждой стороне) + запас.
 // Класс ставится из paradoxDock.ts show() на основании параметра size меню.
 #paradox-dock.dock-size-small {
-    // Для #inventory (12em × 15em native).
-    // 12em + 4em padding + 4em воздух = 20em ширина; 15em + 4em + 1em = 20em высота.
+    // Для #inventory (12em × 18em — 5×5 сетка, INVENTORY_SIZE=25 в Paradox Online).
+    // 12em + 4em padding + 4em воздух для frame border-image = 20em ширина (влазит);
+    // 18em + 4em padding + 2em запас под frame border-image = 24em высота.
+    // HOTFIX 20.04 вечер: было min-height 20em — 5-й ряд слотов вылетал снизу dock'а
+    // за frame (визуальная рамка border-image 4.75em съедает часть content area).
     min-width: 20em;
-    min-height: 20em;
+    min-height: 24em;
 }
 
 #paradox-dock.dock-size-medium {
@@ -159,13 +162,16 @@
         position: relative;
         inset: auto;
 
-        // Нативный Kaetram-размер 12em × 15em. Критично: flex:none, иначе flex-parent
-        // (body шириной 32em+) растягивает inventory на всю ширину → grid cells огромные
-        // → .item-slot 3em ломает layout → слоты вылезают за dock снизу.
+        // Нативный Kaetram-размер 12em × 15em — но Paradox Online поднял INVENTORY_SIZE
+        // до 25 (5×5 сетка вместо ванильных 4×5). 15em высоты недостаточно для 5 рядов —
+        // 5-й ряд вылетает снизу. Увеличиваем высоту до 18em — (18 - 4*0.2gap)/5 = 3.44em
+        // на ряд, item-slot с sprite-ratio помещается.
+        // Критично: flex:none, иначе flex-parent растягивает inventory на всю ширину →
+        // grid cells огромные → слоты вылезают за dock снизу.
         flex: none;
 
         width: 12em;
-        height: 15em;
+        height: 18em;
         margin: 0;
     }
 
