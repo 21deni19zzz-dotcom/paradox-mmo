@@ -1,0 +1,201 @@
+// ────────────────────────────────────────────────────────────────────────────
+// Paradox Online · Sprint 2 v2 Заход 3 · Golden UI overhaul
+//
+// Цель: единое место + единый стиль для всех меню. Вдохновлено Golden UI
+// (Michele "Buch" Bucelli, CC-BY-SA, opengameart.org).
+//
+// Подход: CSS-only, без замены PNG. Переопределяем border-image → чистое
+// CSS оформление (фон-градиент, золотая рамка, inset-тень). Все меню
+// центрируются через inset:0 + margin:auto.
+//
+// Zero touch: #canvas, #game-container, #border, :root, !important.
+// ────────────────────────────────────────────────────────────────────────────
+
+// ═══ Цвета Golden UI ═══════════════════════════════════════════════════════
+// --gold-light: светло-золотой (обводки, акценты)
+// --gold-dark: тёмно-золотой (наполнение обводки)
+// --bronze-bg-top: верхний градиент фона
+// --bronze-bg-bottom: нижний градиент фона
+// --shadow-inset: внутренняя тень (объём)
+// Локальные переменные внутри селектора — не наследуются на canvas.
+
+// ═══ 1. УНИФИЦИРОВАННОЕ ПОЗИЦИОНИРОВАНИЕ ═══════════════════════════════════
+// Все основные меню открываются в ЦЕНТРЕ экрана. Inventory больше не в
+// top-right — теперь тоже центр (как и все остальные).
+
+#inventory {
+    // Sprint 2 v2 #4 сдвиг в top-right отменяю — унифицирую в центр.
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
+    inset: 0;
+    margin: auto;
+
+    width: 20em;
+    height: 22em;
+}
+
+// Настройки, профиль, друзья, квесты — все в центр.
+.slice-page {
+    bottom: auto;
+    inset: 0;
+    margin: auto;
+}
+
+// ═══ 2. GOLDEN UI СТИЛЬ НА ОВЕРЛЕИ ═════════════════════════════════════════
+
+.slice-container,
+.slice-container-fancy,
+.slice-dialog,
+.slice-page {
+    // Отменяем Kaetram border-image — заменяем на CSS.
+    border-image: none;
+
+    // Тёмно-бронзовый градиент (глубина)
+    background:
+        linear-gradient(
+            180deg,
+            rgb(62 50 40 / 96%) 0%,
+            rgb(44 36 28 / 96%) 50%,
+            rgb(34 26 20 / 96%) 100%
+        );
+
+    // Золотая обводка как в Golden UI
+    border: 0.2em solid #c8843a;
+    border-radius: 0.6em;
+
+    // Inset-тень для объёма + внешнее легкое свечение.
+    // Inset-тени БЕЗОПАСНЫ — не выходят за границы элемента, canvas не задевает.
+    box-shadow:
+        inset 0 0 1.5em rgb(0 0 0 / 60%),
+        inset 0 0.15em 0 rgb(220 170 90 / 25%);
+
+    color: #ede0c8;
+}
+
+// Более нарядная обводка для fancy-контейнеров.
+.slice-container-fancy {
+    border-width: 0.3em;
+    border-color: #d89c47;
+}
+
+// ═══ 3. SLOT STYLING (Golden UI slots) ═════════════════════════════════════
+// Слоты inventory, bank, store и т.п. — тёмно-серые ячейки с золотой рамкой.
+
+.slice-inner-container {
+    background: rgb(20 16 12 / 55%);
+    border: 0.1em solid rgb(100 70 40 / 70%);
+    border-radius: 0.35em;
+    box-shadow: inset 0 0 0.5em rgb(0 0 0 / 50%);
+}
+
+.item-slot,
+.slice-item-slot,
+.slice-list-item {
+    box-sizing: border-box;
+    background: rgb(18 15 12 / 80%);
+    border: 0.1em solid rgb(140 90 45 / 55%);
+    border-radius: 0.2em;
+    box-shadow: inset 0 0.05em 0.3em rgb(0 0 0 / 50%);
+    transition: border-color 0.15s ease, background 0.15s ease;
+
+    &:hover {
+        background: rgb(40 30 18 / 90%);
+        border-color: #d89c47;
+    }
+}
+
+// ═══ 4. CLOSE-BUTTONS и ЗАГОЛОВКИ ══════════════════════════════════════════
+
+.close-container,
+.close-container-fancy {
+    cursor: pointer;
+    border-radius: 50%;
+    transition: transform 0.15s ease, filter 0.15s ease;
+
+    &:hover {
+        transform: scale(1.1);
+        filter: brightness(1.2);
+    }
+}
+
+.title-decoration {
+    color: #f0c878;
+    text-shadow:
+        0 0 0.3em rgb(200 132 58 / 60%),
+        0 0.1em 0.1em rgb(0 0 0 / 70%);
+    letter-spacing: 0.05em;
+}
+
+// ═══ 5. КНОПКИ ВНУТРИ МЕНЮ ══════════════════════════════════════════════════
+
+.slice-button,
+.element-button {
+    background: linear-gradient(
+        180deg,
+        rgb(180 110 50 / 90%) 0%,
+        rgb(140 80 35 / 90%) 100%
+    );
+    border: 0.1em solid #d89c47;
+    border-radius: 0.3em;
+    color: #fff;
+    text-shadow: 0 0.1em 0.1em rgb(0 0 0 / 60%);
+    transition: transform 0.12s ease, filter 0.12s ease;
+
+    &:hover {
+        filter: brightness(1.15);
+        transform: translateY(-0.05em);
+    }
+
+    &:active {
+        filter: brightness(0.9);
+        transform: translateY(0.05em);
+    }
+}
+
+.element-button-red {
+    background: linear-gradient(
+        180deg,
+        rgb(180 60 50 / 90%) 0%,
+        rgb(130 35 30 / 90%) 100%
+    );
+    border-color: #e87058;
+}
+
+// ═══ 6. INPUT FIELDS в меню ═════════════════════════════════════════════════
+
+.slice-input {
+    background: rgb(20 15 10 / 70%);
+    border: 0.1em solid rgb(120 85 40 / 70%);
+    border-radius: 0.25em;
+    color: #ede0c8;
+
+    &:focus {
+        border-color: #d89c47;
+        outline: none;
+    }
+}
+
+// ═══ 7. CHAT ─ стекло-стиль ─────────────────────────────────────────────────
+
+#chat-log,
+#chat-frame {
+    background: rgb(20 15 10 / 55%);
+    border: 0.1em solid rgb(100 70 40 / 55%);
+    border-radius: 0.35em;
+    box-shadow: inset 0 0 0.5em rgb(0 0 0 / 40%);
+}
+
+#chat-input {
+    background: rgb(20 15 10 / 70%);
+    border: 0.1em solid rgb(120 85 40 / 70%);
+    border-radius: 0.25em;
+    color: #ede0c8;
+    padding: 0.3em 0.6em;
+
+    &:focus {
+        border-color: #d89c47;
+        outline: none;
+    }
+}
