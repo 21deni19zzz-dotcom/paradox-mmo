@@ -169,37 +169,225 @@ body #settings-page,
 body #quests,
 body #achievements,
 body #equipments {
-    // Единая позиция-док справа. Используем inset shorthand (top right bottom left)
-    // чтобы перебить .slice-container { inset: 0 } без конфликта с cssnano-
-    // оптимизатором (который склеивал 4 свойства в 'inset: auto' удаляя их).
     position: absolute;
     inset: 1em 5em 1em auto;
-
-    // Единые размеры
     width: 24em;
     height: auto;
     max-height: calc(100vh - 2em);
     margin: 0;
 
-    // Единая шторка-анимация
+    background: linear-gradient(to bottom, $gold-fill-top 0%, $gold-fill-bottom 100%);
+    border: 2px solid $gold-border;
+    border-radius: 0.35em;
+    outline: 2px solid $gold-border-dark;
+    outline-offset: 0;
+
+    padding: 1em 0.8em;
+    color: #f4dfb8;
+
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+
     animation: paradox-dock-slide-in 0.4s cubic-bezier(0.25, 0.8, 0.4, 1);
 }
 
-// Применяем Golden UI стиль ко всем (уже применён #inventory в секции выше,
-// добавляю для остальных)
-#profile-container,
-#friends-container,
-#settings-page,
-#quests,
-#achievements,
-#equipments {
-    @include golden-frame;
-    @include golden-studs;
-    padding: 0.55em;
+body #inventory::before,
+body #inventory::after,
+body #profile-container::before,
+body #profile-container::after,
+body #friends-container::before,
+body #friends-container::after,
+body #settings-page::before,
+body #settings-page::after,
+body #quests::before,
+body #quests::after,
+body #achievements::before,
+body #achievements::after,
+body #equipments::before,
+body #equipments::after {
+    content: '';
+    position: absolute;
+    width: 0.6em;
+    height: 0.6em;
+    background: radial-gradient(circle at 30% 30%, $gold-stud 0%, #8a5a1a 70%, #2a1404 100%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 2;
+}
+
+body #inventory::before,
+body #profile-container::before,
+body #friends-container::before,
+body #settings-page::before,
+body #quests::before,
+body #achievements::before,
+body #equipments::before {
+    top: -0.25em;
+    left: -0.25em;
+}
+
+body #inventory::after,
+body #profile-container::after,
+body #friends-container::after,
+body #settings-page::after,
+body #quests::after,
+body #achievements::after,
+body #equipments::after {
+    top: -0.25em;
+    right: -0.25em;
+}
+
+// Scrollable content
+body #settings-container,
+body #friends-page,
+body #quests-container,
+body #achievements-content {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 0.3em;
+}
+
+// Inner container (input-settings, action-settings)
+body #settings-page .slice-inner-container {
+    background: rgb(0 0 0 / 25%);
+    border: 1px solid $gold-border-dark;
+    border-radius: 0.25em;
+    border-image: none;
+    padding: 0.7em;
+    margin-bottom: 0.5em;
+}
+
+// Game info block
+body #game-info {
+    background: rgb(0 0 0 / 25%);
+    border: 1px solid $gold-border-dark;
+    border-radius: 0.25em;
+    padding: 0.5em 0.7em;
+    font-size: 0.85em;
+
+    strong {
+        color: $gold-stud;
+    }
+
+    span {
+        color: #e8d4a8;
+    }
+}
+
+// Logout + slice-button — Golden bronze
+body #logout-button,
+body .slice-button {
+    background: linear-gradient(to bottom, #c78a3e 0%, #8a5a1a 100%);
+    border: 1.5px solid $gold-border-dark;
+    border-image: none;
+    border-radius: 0.25em;
+    color: #1a0e04;
+    font-weight: 700;
+    padding: 0.5em 1em;
+    cursor: pointer;
+    transition: transform 0.1s ease, filter 0.1s ease;
+}
+
+body #logout-button:hover,
+body .slice-button:hover {
+    filter: brightness(1.15);
+    transform: translateY(-1px);
+}
+
+body #logout-button:active,
+body .slice-button:active {
+    transform: translateY(0);
+    filter: brightness(0.92);
+}
+
+// Close buttons — красный квадрат с ×
+body #inventory .close-container,
+body #profile-container .close-container,
+body #friends-container .close-container,
+body #settings-page .close-container,
+body #quests .close-container,
+body #achievements .close-container,
+body #equipments .close-container,
+body .close-container-fancy {
+    position: absolute;
+    top: 0.4em;
+    right: 0.4em;
+    width: 1.6em;
+    height: 1.6em;
+    background-image: none;
+    background: linear-gradient(to bottom, #c83535 0%, #7a1a1a 100%);
+    border: 1.5px solid #3a0a0a;
+    border-radius: 0.2em;
+    cursor: pointer;
+    transition: filter 0.1s;
+}
+
+body #inventory .close-container::before,
+body #profile-container .close-container::before,
+body #friends-container .close-container::before,
+body #settings-page .close-container::before,
+body #quests .close-container::before,
+body #achievements .close-container::before,
+body #equipments .close-container::before,
+body .close-container-fancy::before {
+    content: '×';
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 1.4em;
+    font-weight: 700;
+    line-height: 1;
+}
+
+body #inventory .close-container:hover,
+body #profile-container .close-container:hover,
+body #friends-container .close-container:hover,
+body #settings-page .close-container:hover,
+body #quests .close-container:hover,
+body #achievements .close-container:hover,
+body #equipments .close-container:hover,
+body .close-container-fancy:hover {
+    filter: brightness(1.15);
+}
+
+// Text labels
+body #settings-page span,
+body #settings-page label,
+body #profile-container span,
+body #profile-container label,
+body #friends-container span,
+body #friends-container label {
     color: #f4dfb8;
 }
 
-// На мобильном — меню почти на весь экран
+// Range slider — golden
+body input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    background: rgb(0 0 0 / 50%);
+    border: 1px solid $gold-border-dark;
+    border-radius: 0.25em;
+    height: 0.6em;
+    margin: 0.2em 0;
+}
+
+body input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    background: $gold-stud;
+    border: 1px solid $gold-border-dark;
+    border-radius: 0.2em;
+    width: 0.8em;
+    height: 1em;
+    cursor: pointer;
+}
+
+// Mobile
 @media only screen and (max-width: 900px) {
     body #inventory,
     body #profile-container,
