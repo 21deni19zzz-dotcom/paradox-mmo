@@ -4,7 +4,11 @@
 #inventory {
     position: absolute;
     right: 1em;
-    bottom: 4em;
+
+    // Sprint 2 v2 #4: правый ВЕРХ вместо правого низа — перестаёт накладываться на
+    // action-bar (#buttons right:0; bottom:0). HP/Mana в левом верху, поэтому
+    // правый верх свободен. При открытии inventory action-bar остаётся виден и кликабелен.
+    top: 1em;
 
     display: none;
 
