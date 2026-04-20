@@ -147,7 +147,7 @@ export default class Leaderboards extends Menu {
     public override show(): void {
         let dock = ParadoxDock.getInstance();
 
-        if (dock && !dock.isVisible()) dock.show('Рейтинг', this.container, () => this.hide());
+        if (dock && !dock.isVisible()) dock.show('Рейтинг', this.container, () => this.hide(), 'large');
 
         super.show();
 

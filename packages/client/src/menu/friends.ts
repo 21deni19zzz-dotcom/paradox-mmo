@@ -64,7 +64,7 @@ export default class Friends extends Menu {
     public override show(): void {
         let dock = ParadoxDock.getInstance();
 
-        if (dock && !dock.isVisible()) dock.show('Друзья', this.container, () => this.hide());
+        if (dock && !dock.isVisible()) dock.show('Друзья', this.container, () => this.hide(), 'medium');
 
         super.show();
     }

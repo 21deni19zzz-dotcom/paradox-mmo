@@ -724,7 +724,7 @@ export default class Guilds extends Menu {
     public override show(): void {
         let dock = ParadoxDock.getInstance();
 
-        if (dock && !dock.isVisible()) dock.show('Гильдия', this.container, () => this.hide());
+        if (dock && !dock.isVisible()) dock.show('Гильдия', this.container, () => this.hide(), 'large');
 
         super.show();
 

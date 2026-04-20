@@ -39,7 +39,7 @@ export default class Achievements extends Menu {
     public override show(): void {
         let dock = ParadoxDock.getInstance();
 
-        if (dock && !dock.isVisible()) dock.show('Достижения', this.container, () => this.hide());
+        if (dock && !dock.isVisible()) dock.show('Достижения', this.container, () => this.hide(), 'large');
 
         super.show();
     }

@@ -330,7 +330,7 @@ export default class Inventory extends Menu {
     public override show(): void {
         let dock = ParadoxDock.getInstance();
 
-        if (dock && !dock.isVisible()) dock.show('Инвентарь', this.container, () => this.hide());
+        if (dock && !dock.isVisible()) dock.show('Инвентарь', this.container, () => this.hide(), 'small');
 
         super.show();
     }

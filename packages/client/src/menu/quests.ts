@@ -33,7 +33,7 @@ export default class Quests extends Menu {
     public override show(): void {
         let dock = ParadoxDock.getInstance();
 
-        if (dock && !dock.isVisible()) dock.show('Квесты', this.container, () => this.hide());
+        if (dock && !dock.isVisible()) dock.show('Квесты', this.container, () => this.hide(), 'large');
 
         super.show();
     }

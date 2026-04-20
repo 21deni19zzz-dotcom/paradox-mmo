@@ -76,8 +76,17 @@ export default class ParadoxDock {
      * @param title Заголовок (например "Инвентарь").
      * @param menuElement DOM-узел меню, которое нужно обернуть (например document.querySelector('#inventory')).
      * @param onClose Callback, вызываемый когда пользователь нажал ✕ или Esc.
+     * @param size Размер dock'а: 'small' (20×20em, inventory), 'medium' (28×22em, profile/friends)
+     *   или 'large' (36×22em, settings/quests/guilds/achievements/leaderboards). Default 'large'.
+     *   На #paradox-dock навешивается соответствующий класс .dock-size-${size}, определённый
+     *   в _paradox-dock.scss — размеры задаются CSS'ом, не хардкодом.
      */
-    public show(title: string, menuElement: HTMLElement, onClose: () => void): void {
+    public show(
+        title: string,
+        menuElement: HTMLElement,
+        onClose: () => void,
+        size: 'small' | 'medium' | 'large' = 'large'
+    ): void {
         if (this.animatingOut) return; // защита от гонки
 
         // Если dock уже занят другим меню — закрываем предыдущее синхронно.
@@ -94,6 +103,12 @@ export default class ParadoxDock {
         this.bodyEl.appendChild(menuElement);
 
         this.titleEl.textContent = title;
+
+        // Сбрасываем предыдущий размер и ставим новый — размеры dock'а задаются
+        // тремя классами .dock-size-{small,medium,large} в _paradox-dock.scss.
+        this.element.classList.remove('dock-size-small', 'dock-size-medium', 'dock-size-large');
+        this.element.classList.add(`dock-size-${size}`);
+
         this.element.classList.add('paradox-dock-visible');
     }
 
