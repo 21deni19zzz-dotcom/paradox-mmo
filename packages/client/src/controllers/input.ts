@@ -283,13 +283,8 @@ export default class InputController {
             }
 
             case 'KeyM': {
-                // Map / Warp
-                this.game.menu.getWarp().toggle();
-                return;
-            }
-
-            case 'KeyN': {
-                // World Map overlay (Navigation) — Sprint 3
+                // Sprint 3 Заход 1+2 — единая карта мира (fog-of-war).
+                // Старая warp-мини-карта остаётся доступна через кнопку #warp-button в HUD.
                 this.game.menu.getWorldMap().toggle();
                 return;
             }
