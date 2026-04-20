@@ -46,14 +46,17 @@ export default class ParadoxDock {
         this.bodyEl = document.querySelector('#paradox-dock-body')!;
         this.closeBtn = document.querySelector('#paradox-dock-close')!;
 
+        if (!this.element || !this.titleEl || !this.bodyEl || !this.closeBtn)
+            throw new Error(
+                '[ParadoxDock] DOM not ready: one of #paradox-dock / -title / -body / -close missing'
+            );
+
         this.closeBtn.addEventListener('click', () => this.handleCloseClick());
 
-        // Esc на уровне документа — универсальное закрытие dock'а. Kaetram сам обрабатывает
-        // Esc на своих меню, мы только добавляем путь для dock (если меню не перехватило).
-        document.addEventListener('keydown', (event: KeyboardEvent) => {
-            if (event.code === 'Escape' && this.isVisible() && !this.animatingOut)
-                this.handleCloseClick();
-        });
+        // NB: Escape обрабатывается централизованно в controllers/input.ts handleKeyDown
+        // (case 'Escape' вызывает game.menu.hide() → override hide() каждого меню →
+        // ParadoxDock.getInstance()?.hide(this.container)). Дублирующий document listener
+        // убран — он создавал двойной fadeOut и лишнюю работу.
 
         ParadoxDock.instance = this;
     }
@@ -88,7 +91,7 @@ export default class ParadoxDock {
 
         // Физический перенос DOM (ссылки addEventListener и внутренние querySelector'ы
         // сохраняются — это одна из гарантий DOM API).
-        this.bodyEl.append(menuElement);
+        this.bodyEl.appendChild(menuElement);
 
         this.titleEl.textContent = title;
         this.element.classList.add('paradox-dock-visible');
@@ -97,10 +100,26 @@ export default class ParadoxDock {
     /**
      * Закрыть dock, запустить slide-out и вернуть DOM-узел в исходную позицию.
      *
-     * Важно: НЕ вызывает onClose — это закрытие "изнутри" (sync с Kaetram hide()).
+     * @param hostedElement Опциональная guard-проверка: если передано, dock закроется
+     *   ТОЛЬКО если сейчас hosted именно этот элемент. Нужно чтобы override hide()
+     *   одного меню случайно не закрыл dock, в котором уже открыто другое меню.
+     *
+     *   Сценарий P0-бага: user нажимает I (dock с inventory), потом C (profile).
+     *   profile.show() → dock.show(profile) → restoreHostedNow(inventory) → dock теперь hosts profile.
+     *   Затем super.show() → MenuController.hide() → forEach → inventory.hide() (т.к. isVisible
+     *   по inline display:flex) → ParadoxDock.getInstance()?.hide(inventoryContainer) →
+     *   сейчас hosted=profileContainer → guard не пройдёт → dock НЕ закрывается.
+     *
+     *   Важно: hide() без параметра закроет dock в любом случае (backward-compat для случаев
+     *   когда нужно принудительно закрыть, но в override menu-меню ВСЕГДА передаём this.container).
+     *
+     * Не вызывает onClose — это закрытие "изнутри" (sync с Kaetram hide()).
      * Для закрытия по кнопке ✕ используется handleCloseClick.
      */
-    public hide(): void {
+    public hide(hostedElement?: HTMLElement): void {
+        // Guard: если меню просит закрыть dock, но сейчас hosted другой — игнорируем.
+        if (hostedElement && this.hostedElement !== hostedElement) return;
+
         if (!this.isVisible() || this.animatingOut) return;
 
         this.animatingOut = true;

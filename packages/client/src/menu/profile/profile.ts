@@ -75,7 +75,7 @@ export default class Profile extends Menu {
 
         this.skills.hideInfo();
 
-        ParadoxDock.getInstance()?.hide();
+        ParadoxDock.getInstance()?.hide(this.container);
     }
 
     /**

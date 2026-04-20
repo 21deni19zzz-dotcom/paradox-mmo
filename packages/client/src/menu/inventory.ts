@@ -349,7 +349,7 @@ export default class Inventory extends Menu {
         this.actions.hide();
 
         // Paradox Dock slide-out + возврат DOM-узла в исходный parent (#border).
-        ParadoxDock.getInstance()?.hide();
+        ParadoxDock.getInstance()?.hide(this.container);
     }
 
     /**

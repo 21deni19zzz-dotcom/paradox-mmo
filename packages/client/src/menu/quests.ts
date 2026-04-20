@@ -41,7 +41,7 @@ export default class Quests extends Menu {
     public override hide(): void {
         super.hide();
 
-        ParadoxDock.getInstance()?.hide();
+        ParadoxDock.getInstance()?.hide(this.container);
     }
 
     /**

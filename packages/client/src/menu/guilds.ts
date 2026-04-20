@@ -748,7 +748,7 @@ export default class Guilds extends Menu {
         // Hide the create interface if the player is not in a guild.
         if (!this.game.player.guild) this.handleBackButton();
 
-        ParadoxDock.getInstance()?.hide();
+        ParadoxDock.getInstance()?.hide(this.container);
     }
 
     /**

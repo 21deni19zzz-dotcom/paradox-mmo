@@ -101,6 +101,12 @@
     &:active {
         transform: scale(0.95);
     }
+
+    // A11y: visible focus ring для клавиатурной навигации.
+    &:focus-visible {
+        outline: 2px solid #f5e6c8;
+        outline-offset: 2px;
+    }
 }
 
 // Тело dock'а — контейнер, куда переносится Kaetram-меню (#inventory и др.)
@@ -117,12 +123,13 @@
     // Когда Kaetram-#inventory физически перенесён внутрь dock'а — перекрываем его
     // абсолютное позиционирование (top/right/bottom/left = 1em) на relative-обтекание.
     // Specificity = 0,3,0 (три ID) > 0,1,0 оригинала — без !important.
+    //
+    // NB: display здесь НЕ переопределяем — Util.fadeIn() в базовом Menu.show() ставит
+    // inline element.style.display = 'flex'; inline-стили побеждают specificity.
+    // isVisible() опирается на этот же inline display и работает корректно.
     & > #inventory {
         position: relative;
         inset: auto;
-
-        // Убираем оригинальный display:none только внутри dock'a — dock сам управляет видимостью.
-        display: block;
 
         width: 12em;
         height: 15em;

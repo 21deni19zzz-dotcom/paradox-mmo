@@ -165,7 +165,7 @@ export default class Leaderboards extends Menu {
         // Clear the input field
         this.search.value = '';
 
-        ParadoxDock.getInstance()?.hide();
+        ParadoxDock.getInstance()?.hide(this.container);
     }
 
     /**
