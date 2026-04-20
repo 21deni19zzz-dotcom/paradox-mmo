@@ -24,20 +24,12 @@
     transform: translate(-50%, -50%) scale(0.92);
 
     box-sizing: border-box;
-    // Dock должен вмещать САМОЕ ШИРОКОЕ меню без overflow:
-    //   #inventory          12em
-    //   #profile-container  24em (slice-page)
-    //   #friends-container  24em (slice-page)
-    //   #settings-page      32em (slice-container)
-    //   #quests             32em
-    //   #guilds             32em + padding-left: 8.5em для sidebar-list → эффективно ~35em
-    //   #achievements       32em × 16em desktop, 22em × 27em portrait
-    //   #leaderboards       32em
-    //
-    // min-width: 36em = 32em (max) + padding 4em + запас 0.
-    // Для guilds с sidebar-list за 8.5em падает справа — overflow допустим, это существующий Kaetram design.
-    min-width: 36em;
-    min-height: 22em; // 16em (max height desktop) + padding 4em + запас 2em
+
+    // Размеры задаются через .dock-size-* классы (см. ниже) в зависимости от того,
+    // какое меню сейчас в доке. paradoxDock.ts ставит класс в show() на основании
+    // параметра size ('small' | 'medium' | 'large'), который передаёт каждое меню.
+    // HOTFIX Sprint 2 Заход 3 (20.04.2026): один размер dock'а не может вмещать все
+    // 8 меню с разными Kaetram-дефолтами геометрически — нужны три размера.
     padding: 2.5em 2em 1.5em; // воздух сверху для title
 
     color: #eee;
@@ -57,6 +49,30 @@
         transform: translate(-50%, -50%) scale(1);
         opacity: 1;
     }
+}
+
+// Размерные классы — dock подстраивается под размер обрамляемого меню.
+// Значения рассчитаны как: Kaetram-native width/height + 4em padding (2em по каждой стороне) + запас.
+// Класс ставится из paradoxDock.ts show() на основании параметра size меню.
+#paradox-dock.dock-size-small {
+    // Для #inventory (12em × 15em native).
+    // 12em + 4em padding + 4em воздух = 20em ширина; 15em + 4em + 1em = 20em высота.
+    min-width: 20em;
+    min-height: 20em;
+}
+
+#paradox-dock.dock-size-medium {
+    // Для #profile-container, #friends-container (24em × 17em после HOTFIX height-bump).
+    // 24em + 4em padding = 28em ширина; 17em + 4em + 1em = 22em высота.
+    min-width: 28em;
+    min-height: 22em;
+}
+
+#paradox-dock.dock-size-large {
+    // Для .slice-container меню: settings/quests/guilds/achievements/leaderboards (32em × 16em).
+    // 32em + 4em padding = 36em ширина; 16em + 4em + 2em = 22em высота.
+    min-width: 36em;
+    min-height: 22em;
 }
 
 // Заголовок dock'а — название текущего меню.
@@ -126,7 +142,7 @@
     position: relative;
 
     display: flex;
-    align-items: stretch;
+    align-items: center; // БЫЛО stretch — не центрировало flex:none детей по вертикали
     justify-content: center;
 
     width: 100%;
@@ -147,6 +163,7 @@
         // (body шириной 32em+) растягивает inventory на всю ширину → grid cells огромные
         // → .item-slot 3em ломает layout → слоты вылезают за dock снизу.
         flex: none;
+
         width: 12em;
         height: 15em;
         margin: 0;
@@ -161,9 +178,12 @@
     & > #friends-container {
         position: relative;
         inset: auto;
+
         flex: none;
+
         width: 24em; // slice-page default
-        height: 15em;
+        height: 17em; // HOTFIX: было 15em — navigator с bottom:1em overlap'ил button-row.
+                      // 17em даёт 2em воздуха, кнопки ровно над navigator-стрелками.
         margin: 0;
 
         // Отдельный вариант bottom-3.5em из .slice-page обнуляется через inset:auto.
@@ -178,7 +198,9 @@
     & > #leaderboards {
         position: relative;
         inset: auto;
+
         flex: none;
+
         width: 32em; // slice-container default
         height: 16em;
         margin: 0;
@@ -213,7 +235,7 @@
 
     background: radial-gradient(circle, #f4d77a 0%, #c9a24a 55%, #6b5020 100%);
     border-radius: 50%;
-    box-shadow: 0 0 0.15em rgba(0, 0, 0, 0.4); // небольшая тень под клёпкой для объёма
+    box-shadow: 0 0 0.15em rgb(0 0 0 / 40%); // небольшая тень под клёпкой для объёма
 }
 
 #paradox-dock::before {
