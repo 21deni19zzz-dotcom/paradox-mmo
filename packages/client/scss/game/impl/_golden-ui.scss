@@ -135,6 +135,86 @@ $gold-fill-bottom: rgb(22 14 6 / 94%);
     font-weight: 700;
 }
 
-#world-map-stats {
-    color: rgb(255 220 150 / 85%);
+// ────────────────────────────────────────────────────────────────────────────
+// UNIFIED MENU DOCK · Sprint 2 v2 Заход 3
+//
+// Все часто-используемые меню открываются в ОДНОЙ зоне справа:
+// - вертикально: от top:1em до bottom:1em
+// - горизонтально: right:5em (с зазором под вертикальный action-bar) до
+//   right:5em + width:24em
+//
+// Selector `body #id` имеет specificity 0,1,1 — перебивает ID-правила (0,1,0)
+// из _inventory.scss, _profile.scss и т.д. без !important.
+//
+// Шторка-анимация: `@keyframes paradox-dock-slide-in` — выезжает из-за
+// правого края (translateX(120%)) до финальной позиции (0). Длина 0.4s
+// cubic-bezier для ощутимого "выкатывания".
+// ────────────────────────────────────────────────────────────────────────────
+
+@keyframes paradox-dock-slide-in {
+    from {
+        opacity: 0;
+        transform: translateX(120%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+body #inventory,
+body #profile-container,
+body #friends-container,
+body #settings-page,
+body #quests,
+body #achievements,
+body #equipments {
+    // Единая позиция-док справа
+    position: absolute;
+    top: 1em;
+    right: 5em;
+    bottom: 1em;
+    left: auto;
+
+    // Единые размеры — адаптируется к высоте экрана
+    width: 24em;
+    height: auto;
+    max-height: calc(100vh - 2em);
+    margin: 0;
+    inset: auto;
+
+    // Единая шторка-анимация (перезапустится при каждом display:none→flex)
+    animation: paradox-dock-slide-in 0.4s cubic-bezier(0.25, 0.8, 0.4, 1);
+}
+
+// Применяем Golden UI стиль ко всем (уже применён #inventory в секции выше,
+// добавляю для остальных)
+#profile-container,
+#friends-container,
+#settings-page,
+#quests,
+#achievements,
+#equipments {
+    @include golden-frame;
+    @include golden-studs;
+    padding: 0.55em;
+    color: #f4dfb8;
+}
+
+// На мобильном — меню почти на весь экран
+@media only screen and (max-width: 900px) {
+    body #inventory,
+    body #profile-container,
+    body #friends-container,
+    body #settings-page,
+    body #quests,
+    body #achievements,
+    body #equipments {
+        top: 0.5em;
+        right: 0.5em;
+        bottom: 0.5em;
+        left: auto;
+        width: calc(100vw - 6em); // оставляем 5em под action-bar + немного
+        max-width: 24em;
+    }
 }
