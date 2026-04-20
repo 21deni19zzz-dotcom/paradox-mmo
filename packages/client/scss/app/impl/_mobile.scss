@@ -176,11 +176,10 @@
         width: calc(100% - 2em) !important;
     }
 
-    // ACTION-BAR (HUD buttons) — крупнее и чётче на мобильном
+    // ACTION-BAR (HUD buttons) — крупнее на мобильном. Позиционирование (right/top)
+    // задаётся в _buttons.scss (вертикальная колонка справа по центру).
     #buttons {
         font-size: 1.25em !important;
-        bottom: 0.25em !important;
-        right: 0.25em !important;
     }
 
     // WELCOME модалка после логина — поменьше и column

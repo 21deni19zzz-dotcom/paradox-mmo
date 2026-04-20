@@ -3,19 +3,28 @@
 
 #buttons {
     position: absolute;
+
+    // Sprint 2 v2 #5: вертикальный HUD-столбец по правому краю по центру экрана.
+    // Был: right:0; bottom:0; flex-direction:row (горизонтально снизу справа,
+    // накладывалось на inventory).
+    // Стало: правый край по вертикали, флекс-колонка.
     right: 0;
-    bottom: 0;
+    top: 50%;
+    transform: translateY(-50%);
 
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    gap: 0.1em;
 
-    // Sprint 2 v2: полупрозрачная подложка для контраста HUD над любым ландшафтом.
-    // padding/background на ДОЧЕРНЕМ #buttons — безопасно; скилл запрещает это только
-    // на самих #game-container/#canvas/#border. Радиус только сверху-слева — чтобы
-    // подложка сливалась с правым нижним углом окна.
-    padding: 0.25em 0 0 0.35em;
+    // Подложка для контраста. Закруглены левые углы (правый край подложки
+    // касается края окна).
+    padding: 0.35em 0 0.35em 0.3em;
     background-color: rgb(0 0 0 / 35%);
     border-top-left-radius: 0.5em;
+    border-bottom-left-radius: 0.5em;
+
+    // Плавная анимация при открытии/закрытии (для будущего сворачивания-в-иконку).
+    transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
 @media (--lg) {

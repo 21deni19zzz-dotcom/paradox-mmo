@@ -49,24 +49,31 @@
 #notification {
     pointer-events: none;
 
+    // Sprint 2 v2 #6: уведомления из нижнего центра → верхний центр экрана,
+    // полупрозрачный фон, более плавная анимация slide сверху.
     position: absolute;
-    bottom: -6em;
+    top: -8em;         // скрыт выше экрана
+    bottom: auto;
     left: 50%;
 
     display: flex;
     flex-direction: column;
     gap: 0.2em;
 
-    width: 14em;
-    height: 6em;
-    margin-left: -7em;
-    padding: 1em;
-    padding-top: 1.5em;
+    width: 22em;
+    height: auto;
+    min-height: 4em;
+    margin-left: -11em;    // центрирование по горизонтали (половина от width)
+    padding: 0.8em 1em;
 
-    opacity: 0.8;
-    border-image-width: 1em 1em 0 1em;
+    background-color: rgb(10 14 24 / 65%);
+    border: 1px solid rgb(150 180 255 / 25%);
+    border-radius: 0.5em;
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
 
-    transition: 0.7s bottom ease;
+    opacity: 0;
+    transition: top 0.5s cubic-bezier(0.25, 0.8, 0.4, 1), opacity 0.4s ease;
 }
 
 #notification-text-title {
